@@ -1,14 +1,13 @@
 <?php
 
-use Sendios\Sendios;
+use Sendios\SendiosSdk;
 
-require_once 'autoloader.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 // Init Sendios SDK object
 $clientId = 123;
 $clientHash = 'a1s2d3f4g5h6j7k8l';
-$sendios = new Sendios($clientId, $clientHash);
-
+$sendios = new SendiosSdk($clientId, $clientHash);
 
 // Send email
 $typeId = 1; // letter id

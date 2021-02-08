@@ -12,7 +12,7 @@ Or make HTTP requests via cURL/any
 # PHP SDK
 $clientId = 123;
 $clientToken = 'a1s2d3f4g5h6j7k8l';
-$sendios = new \Sendios\Sendios($clientId, $clientToken);
+$sendios = new \Sendios\SendiosSdk($clientId, $clientToken);
 ```
 ```php
 # PHP cURL

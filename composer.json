@@ -1,5 +1,5 @@
 {
-  "name": "sendios/php-sdk",
+  "name": "src/php-sdk",
   "type": "sdk",
   "description": "Sendios PHP SDK",
   "keywords": [
@@ -26,7 +26,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Sendios\\": "sendios/"
+      "Sendios\\": "src/"
     }
   },
   "autoload-dev": {

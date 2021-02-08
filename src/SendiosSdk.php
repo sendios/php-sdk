@@ -1,0 +1,117 @@
+<?php
+
+namespace Sendios;
+
+use Sendios\Exception\WrongResourceRequestedException;
+use Sendios\Http\Request;
+use Sendios\Resources\Buying;
+use Sendios\Resources\ClientUser;
+use Sendios\Resources\Content;
+use Sendios\Resources\Email;
+use Sendios\Resources\Event;
+use Sendios\Resources\Goal;
+use Sendios\Resources\Push;
+use Sendios\Resources\Unsub;
+use Sendios\Resources\UnsubTypes;
+use Sendios\Resources\User;
+use Sendios\Resources\Webpush;
+use Sendios\Services\Encrypter;
+use Sendios\Services\ErrorHandler;
+
+/**
+ * Class SendiosSdk
+ *
+ * @property ErrorHandler $errorHandler
+ * @property Request $request
+ * @property Buying $buying
+ * @property Push $push
+ * @property Email $email
+ * @property User $user
+ * @property Unsub $unsub
+ * @property UnsubTypes $unsubTypes
+ * @property Webpush $webpush
+ * @property Goal $goal
+ * @property Content $content
+ * @property Event $event
+ * @property ClientUser $clientUser
+ * @property Encrypter $encrypter
+ */
+class SendiosSdk
+{
+    /**
+     * @var int
+     */
+    public $clientId;
+
+    /**
+     * @var string
+     */
+    public $clientKey;
+
+    /**
+     * @var Encrypter
+     */
+    public $encrypter;
+
+    private const RESOURCES_PROPERTIES = ['email', 'user', 'unsub', 'unsubTypes', 'webpush', 'goal', 'content', 'event', 'clientUser', 'buying', 'push'];
+
+    public function __construct($clientId, $clientKey)
+    {
+        if (empty($clientId)) {
+            throw new \InvalidArgumentException('clientId cannot be empty');
+        }
+        if (empty($clientKey)) {
+            throw new \InvalidArgumentException('clientKey cannot be empty');
+        }
+        if (!is_string($clientKey)) {
+            throw new \InvalidArgumentException('clientKey must be a string');
+        }
+
+        $this->clientId = $clientId;
+        $this->clientKey = $clientKey;
+
+        $this->errorHandler = new ErrorHandler();
+        $this->encrypter = $this->getEncrypter($this->clientKey);
+        $this->request = new Request($this->clientId, $this->clientKey, $this->errorHandler);
+    }
+
+    /**
+     * Use this only for Resources access
+     * @param $name
+     * @return mixed
+     * @throws WrongResourceRequestedException
+     */
+    public function __get(string $name)
+    {
+        if (!in_array($name, self::RESOURCES_PROPERTIES, true)) {
+            throw new WrongResourceRequestedException("Requested property {$name} is not in resources list");
+        }
+        if (!property_exists($this, $name)) {
+            if ($name === 'push') {
+                $this->push = new Push($this->clientId, $this->encrypter, $this->errorHandler, $this->request);
+                return $this->push;
+            } elseif ($name === 'unsub') {
+                $this->unsub = new Unsub($this->user, $this->errorHandler, $this->request);
+                return $this->unsub;
+            } else {
+                $className = 'Sendios\Resources\\' . ucfirst($name);
+                $this->{$name} = new $className($this->errorHandler, $this->request);
+                return $this->{$name};
+            }
+        }
+
+        return $this->{$name};
+    }
+
+    /**
+     * @param $clientKey
+     * @return Encrypter
+     * @throws Exception\EncryptException
+     */
+    protected function getEncrypter($clientKey): Encrypter
+    {
+        $hash = substr(md5($clientKey), 4, 16);
+
+        return new Encrypter($hash);
+    }
+}
