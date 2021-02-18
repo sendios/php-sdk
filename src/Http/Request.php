@@ -139,7 +139,7 @@ class Request
 
             return false;
         }
-        $result = json_decode($result['result'], true, 512, JSON_THROW_ON_ERROR);
+        $result = json_decode($result['result'], true);
         if (!$result) {
             return false;
         }
