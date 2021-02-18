@@ -55,7 +55,13 @@ class SendiosSdk
 
     private const RESOURCES_PROPERTIES = ['email', 'user', 'unsub', 'unsubTypes', 'webpush', 'goal', 'content', 'event', 'clientUser', 'buying', 'push'];
 
-    public function __construct($clientId, $clientKey)
+    /**
+     * SendiosSdk constructor.
+     * @param int $clientId
+     * @param string $clientKey
+     * @throws Exception\EncryptException
+     */
+    public function __construct(int $clientId, string $clientKey)
     {
         if (empty($clientId)) {
             throw new \InvalidArgumentException('clientId cannot be empty');
@@ -87,16 +93,20 @@ class SendiosSdk
             throw new WrongResourceRequestedException("Requested property {$name} is not in resources list");
         }
         if (!property_exists($this, $name)) {
-            if ($name === 'push') {
-                $this->push = new Push($this->clientId, $this->encrypter, $this->errorHandler, $this->request);
-                return $this->push;
-            } elseif ($name === 'unsub') {
-                $this->unsub = new Unsub($this->user, $this->errorHandler, $this->request);
-                return $this->unsub;
-            } else {
-                $className = 'Sendios\Resources\\' . ucfirst($name);
-                $this->{$name} = new $className($this->errorHandler, $this->request);
-                return $this->{$name};
+            switch ($name) {
+                case 'push' : {
+                    $this->push = new Push($this->clientId, $this->encrypter, $this->errorHandler, $this->request);
+                    return $this->push;
+                }
+                case 'unsub' : {
+                    $this->unsub = new Unsub($this->user, $this->errorHandler, $this->request);
+                    return $this->unsub;
+                }
+                default : {
+                    $className = 'Sendios\Resources\\' . ucfirst($name);
+                    $this->{$name} = new $className($this->errorHandler, $this->request);
+                    return $this->{$name};
+                }
             }
         }
 
@@ -104,11 +114,11 @@ class SendiosSdk
     }
 
     /**
-     * @param $clientKey
+     * @param string $clientKey
      * @return Encrypter
      * @throws Exception\EncryptException
      */
-    protected function getEncrypter($clientKey): Encrypter
+    protected function getEncrypter(string $clientKey): Encrypter
     {
         $hash = substr(md5($clientKey), 4, 16);
 

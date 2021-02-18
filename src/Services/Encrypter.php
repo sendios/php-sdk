@@ -76,11 +76,11 @@ class Encrypter
     }
 
     /**
-     * @param $iv
-     * @param $value
-     * @return string
+     * @param string $iv
+     * @param string $value
+     * @return false|string
      */
-    private function hash($iv, $value)
+    private function hash(string $iv, string $value): string
     {
         return hash_hmac('sha256', $iv . $value, $this->key);
     }

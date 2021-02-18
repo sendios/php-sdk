@@ -15,27 +15,45 @@ final class User extends Resource
     private const CREATE_LAST_PAYMENT_RESOURCE = 'lastpayment';
     private const CONFIRM_BY_EMAIL_AND_PROJECT_ID_RESOURCE = 'users/project/:projectId/email/:emailHash/confirm';
 
-    const PLATFORM_UNKNOWN = 0;
-    const PLATFORM_DESKTOP = 1;
-    const PLATFORM_MOBILE = 2;
-    const PLATFORM_ANDROID = 3;
-    const PLATFORM_IOS = 4;
+    private const PLATFORM_UNKNOWN = 0;
+    private const PLATFORM_DESKTOP = 1;
+    private const PLATFORM_MOBILE = 2;
+    private const PLATFORM_ANDROID = 3;
+    private const PLATFORM_IOS = 4;
 
-    public function getByEmail($email, $projectId)
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @return false|mixed
+     * @throws \Exception
+     */
+    public function getByEmail(string $email, int $projectId)
     {
         $result = $this->request->receive(strtr(self::GET_USER_BY_EMAIL_RESOURCE, [
-            ':projectId' => (int)$projectId,
+            ':projectId' => $projectId,
             ':email' => $email
         ]));
+
         return $result ? $result['user'] : false;
     }
 
-    public function getById($userId)
+    /**
+     * @param int $userId
+     * @return false|mixed
+     * @throws \Exception
+     */
+    public function getById(int $userId)
     {
         $result = $this->request->receive(strtr(self::GET_USER_BY_ID_RESOURCE, [':userId' => $userId]));
+
         return $result ? $result['user'] : false;
     }
 
+    /**
+     * @param $user
+     * @return array|false|mixed
+     * @throws \Exception
+     */
     public function resolve($user)
     {
         if (is_array($user)) {
@@ -48,27 +66,27 @@ final class User extends Resource
         return false;
     }
 
-    public function getPlatformUnknown()
+    public function getPlatformUnknown(): int
     {
         return self::PLATFORM_UNKNOWN;
     }
 
-    public function getPlatformDesktop()
+    public function getPlatformDesktop(): int
     {
         return self::PLATFORM_DESKTOP;
     }
 
-    public function getPlatformMobile()
+    public function getPlatformMobile(): int
     {
         return self::PLATFORM_MOBILE;
     }
 
-    public function getPlatformAndroid()
+    public function getPlatformAndroid(): int
     {
         return self::PLATFORM_ANDROID;
     }
 
-    public function getPlatformIos()
+    public function getPlatformIos(): int
     {
         return self::PLATFORM_IOS;
     }
@@ -78,15 +96,17 @@ final class User extends Resource
      *
      * @param string $email
      * @param int $projectId
-     * @param array $data ['fieldName' => 'fieldValue']
-     * @return bool
+     * @param array $data
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function setUserFieldsByEmailAndProjectId($email, $projectId, array $data)
+    public function setUserFieldsByEmailAndProjectId(string $email, int $projectId, array $data)
     {
         $resource = strtr(self::SET_USER_FIELDS_BY_EMAIL_HASH_AND_PROJECT_ID_RESOURCE, [
-            ':projectId' => (int)$projectId,
+            ':projectId' => $projectId,
             ':emailHash' => base64_encode($email)
         ]);
+
         return $this->request->update($resource, $data);
     }
 
@@ -94,12 +114,12 @@ final class User extends Resource
      * Set custom user fields by user
      *
      * @param array $user
-     * @param array $data ['fieldName' => 'fieldValue']
-     * @return bool
+     * @param array $data
+     * @return bool|mixed
+     * @throws \Exception
      */
     public function setUserFieldsByUser(array $user, array $data)
     {
-        $user = $this->resolve($user);
         if (!$user || !$user['id']) {
             return false;
         }
@@ -107,6 +127,7 @@ final class User extends Resource
         $resource = strtr(self::SET_USER_FIELDS_BY_USER_ID_RESOURCE, [
             ':userId' => $user['id'],
         ]);
+
         return $this->request->update($resource, $data);
     }
 
@@ -115,14 +136,16 @@ final class User extends Resource
      *
      * @param string $email
      * @param int $projectId
-     * @return bool
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function getUserFieldsByEmailAndProjectId($email, $projectId)
+    public function getUserFieldsByEmailAndProjectId(string $email, int $projectId)
     {
         $resource = strtr(self::GET_USER_FIELDS_BY_EMAIL_AND_PROJECT_ID_RESOURCE, [
             ':projectId' => $projectId,
             ':email' => $email,
         ]);
+
         return $this->request->receive($resource);
     }
 
@@ -130,11 +153,11 @@ final class User extends Resource
      * Get custom user fields by user
      *
      * @param array $user
-     * @return bool
+     * @return bool|mixed
+     * @throws \Exception
      */
     public function getUserFieldsByUser(array $user)
     {
-        $user = $this->resolve($user);
         if (!$user || !$user['id']) {
             return false;
         }
@@ -142,10 +165,17 @@ final class User extends Resource
         $resource = strtr(self::GET_USER_FIELDS_BY_USER_ID_RESOURCE, [
             ':userId' => $user['id']
         ]);
+
         return $this->request->receive($resource);
     }
 
-    public function setOnlineByEmailAndProjectId($email, $projectId, \DateTime $dateTime)
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @param \DateTime $dateTime
+     * @return bool|mixed
+     */
+    public function setOnlineByEmailAndProjectId(string $email,int $projectId, \DateTime $dateTime)
     {
         $data = [
             'timestamp' => $dateTime->format('U'),
@@ -160,10 +190,14 @@ final class User extends Resource
         return $this->request->sendToApi3($resource, 'PUT', $data);
     }
 
+    /**
+     * @param array $user
+     * @param \DateTime $dateTime
+     * @return bool|mixed
+     * @throws \Exception
+     */
     public function setOnlineByUser(array $user, \DateTime $dateTime)
     {
-        $user = $this->resolve($user);
-
         if (!$user || !$user['id']) {
             return false;
         }
@@ -181,17 +215,25 @@ final class User extends Resource
     /**
      * Add payment by user email and project ID
      *
-     * @param $email
-     * @param $projectId
-     * @param $startDate
-     * @param bool $expireDate
-     * @param bool|int $totalCount
-     * @param bool|int $paymentType
-     * @param bool|int $amount
-     * @return bool
+     * @param string $email
+     * @param int $projectId
+     * @param int $startDate
+     * @param int|null $expireDate
+     * @param int|null $totalCount
+     * @param int|null $paymentType
+     * @param int|null $amount
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function addPaymentByEmailAndProjectId($email, $projectId, $startDate, $expireDate = false, $totalCount = false, $paymentType = false, $amount = false)
-    {
+    public function addPaymentByEmailAndProjectId(
+        string $email,
+        int $projectId,
+        int $startDate,
+        ?int $expireDate = null,
+        ?int $totalCount = null,
+        ?int $paymentType = null,
+        ?int $amount = null
+    ) {
         $user = $this->getByEmail($email, $projectId);
         if (!$user || !$user['id']) {
             return false;
@@ -201,9 +243,11 @@ final class User extends Resource
             'start_date' => $startDate,
             'user_id' => $user['id'],
         ];
+
         if ($expireDate) {
             $data['expire_date'] = $expireDate;
         }
+
         if ($totalCount) {
             $data['total_count'] = $totalCount;
         }
@@ -223,17 +267,23 @@ final class User extends Resource
      * Add payment by user
      *
      * @param array $user
-     * @param $startDate
-     * @param bool $expireDate
-     * @param bool $totalCount
-     * @param bool $paymentType
-     * @param bool|int $amount
-     * @return bool
+     * @param int $startDate
+     * @param int|null $expireDate
+     * @param int|null $totalCount
+     * @param int|null $paymentType
+     * @param int|null $amount
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function addPaymentByUser(array $user, $startDate, $expireDate = false, $totalCount = false, $paymentType = false, $amount = false)
-    {
-        $user = $this->resolve($user);
-        if (!$user || !$user['id']) {
+    public function addPaymentByUser(
+        array $user,
+        int $startDate,
+        ?int $expireDate = null,
+        ?int $totalCount = null,
+        ?int $paymentType = null,
+        ?int $amount = null
+    ) {
+        if (empty($user) || !$user['id']) {
             return false;
         }
 
@@ -241,9 +291,11 @@ final class User extends Resource
             'start_date' => $startDate,
             'user_id' => $user['id'],
         ];
+
         if ($expireDate) {
             $data['expire_date'] = $expireDate;
         }
+
         if ($totalCount) {
             $data['total_count'] = $totalCount;
         }
@@ -259,10 +311,15 @@ final class User extends Resource
         return $this->request->create(self::CREATE_LAST_PAYMENT_RESOURCE, $data);
     }
 
-    public function forceConfirmByEmailAndProject($email, $projectId)
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @return bool|mixed
+     */
+    public function forceConfirmByEmailAndProject(string $email, int $projectId)
     {
         $data = [
-            'last_reaction' => strtotime('now'),
+            'last_reaction' => time(),
             'project_id' => $projectId,
             'encoded_email' => base64_encode($email)
         ];

@@ -4,6 +4,9 @@ namespace Sendios\Resources;
 
 use Sendios\Exception\ValidationException;
 
+/**
+ * @deprecated Not support this API point
+ */
 final class Content extends Resource
 {
     private const TRACK_SHOW_RESOURCE = 'pushapp/content/show';

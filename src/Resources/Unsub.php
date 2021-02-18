@@ -7,10 +7,10 @@ use Sendios\Services\ErrorHandler;
 
 final class Unsub extends Resource
 {
-    const SOURCE_FBL = 2; // Abuse
-    const SOURCE_LINK = 4; // Link in email
-    const SOURCE_CLIENT = 8; // Any your reason
-    const SOURCE_SETTINGS = 9; // Settings on site
+    public const SOURCE_FBL = 2; // Abuse
+    public const SOURCE_LINK = 4; // Link in email
+    public const SOURCE_CLIENT = 8; // Any your reason
+    public const SOURCE_SETTINGS = 9; // Settings on site
 
     private $userResource;
 
@@ -20,27 +20,52 @@ final class Unsub extends Resource
         parent::__construct($errorHandler, $request);
     }
 
-    public function addByFbl($user)
+    /**
+     * @param array $user
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function addByFbl(array $user)
     {
         return $this->addUser($user, self::SOURCE_FBL);
     }
 
-    public function addByLink($user)
+    /**
+     * @param array $user
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function addByLink(array $user)
     {
         return $this->addUser($user, self::SOURCE_LINK);
     }
 
-    public function addByClient($user)
+    /**
+     * @param array $user
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function addByClient(array $user)
     {
         return $this->addUser($user, self::SOURCE_CLIENT);
     }
 
-    public function addBySettings($user)
+    /**
+     * @param array $user
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function addBySettings(array $user)
     {
         return $this->addUser($user, self::SOURCE_SETTINGS);
     }
 
-    public function subscribe($user)
+    /**
+     * @param array $user
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function subscribe(array $user)
     {
         if (!$user || !$user['id']) {
             return false;
@@ -48,25 +73,40 @@ final class Unsub extends Resource
         return $this->request->delete('unsub/' . $user['id']);
     }
 
-    protected function addUser($user, $sourceId)
+    /**
+     * @param array $user
+     * @param int $sourceId
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    protected function addUser(array $user, int $sourceId)
     {
-        $user = $this->userResource->resolve($user);
         if (!$user || !$user['id']) {
             return false;
         }
         return $this->request->create('unsub/' . $user['id'] . '/source/' . $sourceId);
     }
 
+    /**
+     * @param array $user
+     * @return bool|mixed
+     * @throws \Exception
+     */
     public function isUnsubByUser(array $user)
     {
-        $user = $this->userResource->resolve($user);
         if (!$user || !$user['id']) {
             return false;
         }
         return $this->request->receive('unsub/isunsub/' . $user['id']);
     }
 
-    public function isUnsubByEmailAndProjectId($email, $projectId)
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function isUnsubByEmailAndProjectId(string $email, int $projectId)
     {
         $user = $this->userResource->getByEmail($email, $projectId);
         if (!$user || !$user['id']) {
@@ -76,30 +116,48 @@ final class Unsub extends Resource
         return $this->request->receive('unsub/isunsub/' . $user['id']);
     }
 
-    public function unsubByAdmin($email, $projectId)
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @return bool|false[]|mixed
+     * @throws \Exception
+     */
+    public function unsubByAdmin(string $email, int $projectId)
     {
         if (!$email || !$projectId) {
             return ['unsub' => false];
         }
 
         $result = $this->request->create('unsub/admin/' . $projectId . '/email/' . base64_encode($email));
-        if ($result == false) {
+        if ($result === false) {
             return ['unsub' => false];
         }
-        return $result;
 
+        return $result;
     }
 
-    public function getUnsubscribeReason($email, $projectId)
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function getUnsubscribeReason(string $email, int $projectId)
     {
         $user = $this->userResource->getByEmail($email, $projectId);
         if (!$user || !$user['id']) {
             return false;
         }
+
         return $this->request->receive('unsub/unsubreason/' . $user['id']);
     }
 
-    public function getByDate($date)
+    /**
+     * @param string $date
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function getByDate(string $date)
     {
         return $this->request->receive("unsub/list/" . strtotime($date));
     }

@@ -2,7 +2,9 @@
 
 namespace Sendios\Exception;
 
-class EncryptException extends \Exception
+use Exception;
+
+class EncryptException extends Exception
 {
 
 }

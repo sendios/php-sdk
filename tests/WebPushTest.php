@@ -260,7 +260,7 @@ class WebPushTest extends TestCase
         $this->service->request = $this->request;
         $this->service->errorHandler->setErrorMode(ErrorHandler::MODE_EXCEPTION);
         $this->expectException(ValidationException::class);
-        $result = $this->service->webpush->sendByProjectIdAndHash(1, $hash, 'title', 'text', 'url', 'icon', 1);
+        $this->service->webpush->sendByProjectIdAndHash(1, $hash, 'title', 'text', 'url', 'icon', 1);
     }
 
     public function testSendByProjectIdAndHashNotFoundWithoutException()

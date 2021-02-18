@@ -5,15 +5,12 @@ namespace Sendios\Resources;
 final class UnsubTypes extends Resource
 {
     /**
-     * @param array|int $user
-     * @return bool
+     * @param array $user
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function getList($user)
+    public function getList(array $user)
     {
-        if (is_int($user)) {
-            $user = ['id' => $user];
-        }
-
         if (!$user || !isset($user['id']) || !$user['id']) {
             return false;
         }
@@ -22,15 +19,13 @@ final class UnsubTypes extends Resource
     }
 
     /**
-     * @param array|int $user
+     * @param array $user
      * @param array $typeIds
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function setDisabledTypes($user, array $typeIds)
+    public function setDisabledTypes(array $user, array $typeIds)
     {
-        if (is_int($user)) {
-            $user = ['id' => $user];
-        }
-
         if (!$user || !isset($user['id']) || !$user['id']) {
             return false;
         }
@@ -39,15 +34,13 @@ final class UnsubTypes extends Resource
     }
 
     /**
-     * @param array|int $user
+     * @param array $user
      * @param array $typeIds
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function addTypes($user, array $typeIds)
+    public function addTypes(array $user, array $typeIds)
     {
-        if (is_int($user)) {
-            $user = ['id' => $user];
-        }
-
         if (!$user || !isset($user['id']) || !$user['id']) {
             return false;
         }
@@ -56,15 +49,13 @@ final class UnsubTypes extends Resource
     }
 
     /**
-     * @param array|int $user
+     * @param array $user
      * @param array $typeIds
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function removeTypes($user, array $typeIds)
+    public function removeTypes(array $user, array $typeIds)
     {
-        if (is_int($user)) {
-            $user = ['id' => $user];
-        }
-
         if (!$user || !isset($user['id']) || !$user['id']) {
             return false;
         }
@@ -73,20 +64,16 @@ final class UnsubTypes extends Resource
     }
 
     /**
-     * @param array|int $user
-     * @param array $typeIds
+     * @param array $user
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function removeAll($user)
+    public function removeAll(array $user)
     {
-        if (is_int($user)) {
-            $user = ['id' => $user];
-        }
-
         if (!$user || !isset($user['id']) || !$user['id']) {
             return false;
         }
 
         return $this->request->delete('unsubtypes/all/' . $user['id']);
     }
-
 }
