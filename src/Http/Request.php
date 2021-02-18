@@ -14,11 +14,8 @@ use Sendios\Services\ErrorHandler;
  */
 class Request
 {
-    //@TODO REMOVE IT
-//    const API_BASE = 'https://api.sendios.io/v1/';
-//    const API3_BASE = 'https://api.sendios.io/v3/';
-    const API_BASE = 'http://127.0.0.1:8081/v1/';
-    const API3_BASE = 'http://127.0.0.1:8081/v3/';
+    private const API_BASE = 'https://api.sendios.io/v1/';
+    private const API3_BASE = 'https://api.sendios.io/v3/';
 
     private $clientId;
     private $clientKey;
@@ -29,12 +26,12 @@ class Request
     private $api3Base;
 
     /**
-     * SendiosRequest constructor.
-     * @param $clientId
-     * @param $clientKey
+     * Request constructor.
+     * @param int $clientId
+     * @param string $clientKey
      * @param ErrorHandler $errorHandler
      */
-    public function __construct($clientId, $clientKey, ErrorHandler $errorHandler)
+    public function __construct(int $clientId, string $clientKey, ErrorHandler $errorHandler)
     {
         $this->clientId = $clientId;
         $this->clientKey = $clientKey;
@@ -47,17 +44,18 @@ class Request
     /**
      * @param CurlRequest $curlRequest
      */
-    public function setCurlRequest(CurlRequest $curlRequest)
+    public function setCurlRequest(CurlRequest $curlRequest): void
     {
         $this->curlRequest = $curlRequest;
     }
 
     /**
-     * @param $resource
+     * @param string $resource
      * @param array $data
-     * @return bool
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function receive($resource, array $data = [])
+    public function receive(string $resource, array $data = [])
     {
         return $this->send($resource, 'GET', $data);
     }
@@ -65,9 +63,10 @@ class Request
     /**
      * @param $resource
      * @param array $data
-     * @return bool
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function create($resource, array $data = [])
+    public function create(string $resource, array $data = [])
     {
         return $this->send($resource, 'POST', $data);
     }
@@ -75,9 +74,10 @@ class Request
     /**
      * @param $resource
      * @param array $data
-     * @return bool
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function update($resource, array $data)
+    public function update(string $resource, array $data)
     {
         return $this->send($resource, 'PUT', $data);
     }
@@ -85,9 +85,10 @@ class Request
     /**
      * @param $resource
      * @param array $data
-     * @return bool
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function delete($resource, $data = [])
+    public function delete(string $resource, $data = [])
     {
         return $this->send($resource, 'DELETE', $data);
     }
@@ -95,7 +96,7 @@ class Request
     /**
      * @return Response last request result
      */
-    public function getLastResponse()
+    public function getLastResponse(): Response
     {
         return new Response($this->lastCurlResult);
     }
@@ -109,13 +110,13 @@ class Request
     }
 
     /**
-     * @param string $resource
-     * @param string $method
+     * @param $resource
+     * @param $method
      * @param array $data
-     * @return bool
+     * @return bool|mixed
      * @throws \Exception
      */
-    private function send($resource, $method, $data = [])
+    private function send(string $resource, string $method, array $data = [])
     {
         $method = strtoupper($method);
         $uri = $this->apiBase . $resource;
@@ -125,7 +126,7 @@ class Request
         $headers[] = 'Authorization: Basic ' . base64_encode($this->clientId . ':' . sha1($this->clientKey));
         $result = $this->sendCurl($uri, $method, $data, $headers);
         $this->lastCurlResult = $result;
-        if ($result['code'] != 200) {
+        if ($result['code'] !== 200) {
             $debugData = [
                 'uri' => $uri,
                 'method' => $method,
@@ -138,15 +139,12 @@ class Request
 
             return false;
         }
-        $result = json_decode($result['result'], true);
+        $result = json_decode($result['result'], true, 512, JSON_THROW_ON_ERROR);
         if (!$result) {
             return false;
         }
-        if (isset($result['data'])) {
-            return $result['data'];
-        }
 
-        return true;
+        return $result['data'] ?? true;
     }
 
     /**
@@ -156,7 +154,7 @@ class Request
      * @param $headers
      * @return array
      */
-    private function sendCurl($uri, $method, $data, $headers)
+    private function sendCurl(string $uri, string $method, array $data, array $headers): array
     {
         $this->curlRequest->setOption(CURLOPT_URL, $uri);
         if (count($data)) {
@@ -202,11 +200,8 @@ class Request
         if (!$result) {
             return false;
         }
-        if (isset($result['data'])) {
-            return $result['data'];
-        }
 
-        return true;
+        return $result['data'] ?? true;
     }
 
     public function setOption($name, $value, $permanentOption = false)
@@ -224,20 +219,20 @@ class Request
         $this->curlRequest->resetPermanentOptions();
     }
 
-    private function setApiBase()
+    private function setApiBase(): void
     {
         $this->apiBase = str_replace('client_id', $this->clientId, self::API_BASE);
     }
 
-    private function setApi3Base()
+    private function setApi3Base(): void
     {
         $this->api3Base = str_replace('client_id', $this->clientId, self::API3_BASE);
     }
 
     /**
-     * @return array
+     * @return string[]
      */
-    private function getApi2Headers()
+    private function getApi2Headers(): array
     {
         return [
             'Content-Type: application/json',
@@ -251,7 +246,7 @@ class Request
      * @param array $debugData
      * @return string
      */
-    private function buildExceptionMessage(CurlRequest $curlRequest, array $result, array $debugData)
+    private function buildExceptionMessage(CurlRequest $curlRequest, array $result, array $debugData): string
     {
         $exceptionMsg = 'Request failed: code ' . $result['code'] . ' ' . $result['result'] . ' Request data: ' . json_encode($debugData);
         if ($curlRequest->getErrorNo()) {
