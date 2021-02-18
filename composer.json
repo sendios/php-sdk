@@ -1,5 +1,5 @@
 {
-  "name": "src/php-sdk",
+  "name": "sendios/php-sdk",
   "type": "sdk",
   "description": "Sendios PHP SDK",
   "keywords": [
