@@ -6,7 +6,6 @@ use Sendios\Exception\WrongResourceRequestedException;
 use Sendios\Http\Request;
 use Sendios\Resources\Buying;
 use Sendios\Resources\ClientUser;
-use Sendios\Resources\Content;
 use Sendios\Resources\Email;
 use Sendios\Resources\Event;
 use Sendios\Resources\Goal;
@@ -31,7 +30,6 @@ use Sendios\Services\ErrorHandler;
  * @property UnsubTypes $unsubTypes
  * @property Webpush $webpush
  * @property Goal $goal
- * @property Content $content
  * @property Event $event
  * @property ClientUser $clientUser
  * @property Encrypter $encrypter

@@ -35,5 +35,4 @@ final class ClientUser extends Resource
     {
         return $this->create($email, $projectId, $clientUserId);
     }
-
 }
