@@ -39,6 +39,7 @@ final class Push extends Resource
      * @param array $meta
      * @return bool|mixed
      * @throws \Sendios\Exception\EncryptException
+     * @throws \Exception
      */
     public function send(int $typeId, int $categoryId, int $projectId, string $email, array $user = [], array $data = [], array $meta = [])
     {

@@ -527,11 +527,11 @@ JSON_DATA
 
 # Payments
 ```php
-$startDate = 1509617696;
-$expireDate = 1609617696; //optional (default false)
-$paymentCount = 14; //optional (default false)
-$paymentType = 1; // optional (default false)
-$amount = 20; // optional (default false)
+$startDate = 1509617696; //Payment date or subscription start date 
+$expireDate = 1609617696; //Subscription end date (optional, default false)
+$paymentCount = 14; //Pay count (optional, default false)
+$paymentType = 1; //Pay type (optional, default false)
+$amount = 20; //Pay amount (optional, default false)
 ```
 By email and project ID
 
@@ -723,9 +723,6 @@ Name | Type | Description
         $sendios->event->send($events);
 ```
 
-
-
-
 # Other
 
 ## Get response (if $result === false)
@@ -768,4 +765,3 @@ $sendios->request->setOption(CURLOPT_TIMEOUT_MS, 2000, true);
 ```php
 $sendios->request->resetPermanentOptions();
 ```
->>>>>>> parent of ee76563... Delete README.md
