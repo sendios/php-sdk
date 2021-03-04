@@ -9,14 +9,15 @@ final class Buying extends Resource
     private const CREATE_BUYING_RESOURCE = 'buying/email';
 
     /**
-     * @param $email
-     * @return bool
+     * @param string $email
+     * @return bool|mixed
      * @throws \Exception
      */
-    public function getBuyingDecision($email)
+    public function getBuyingDecision(string $email)
     {
         if (!$email) {
             $this->errorHandler->handle(new ValidationException('Email must be set.'));
+
             return false;
         }
 

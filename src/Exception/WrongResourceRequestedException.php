@@ -2,7 +2,9 @@
 
 namespace Sendios\Exception;
 
-class WrongResourceRequestedException extends \Exception
+use Exception;
+
+class WrongResourceRequestedException extends Exception
 {
 
 }

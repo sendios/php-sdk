@@ -20,8 +20,8 @@ class Request
     private $clientId;
     private $clientKey;
     private $errorHandler;
-    private $curlRequest = null;
-    private $lastCurlResult = null;
+    private $curlRequest;
+    private $lastCurlResult;
     private $apiBase;
     private $api3Base;
 
@@ -104,7 +104,7 @@ class Request
     /**
      * Closed session
      */
-    public function close()
+    public function close(): void
     {
         $this->curlRequest->close();
     }
@@ -204,17 +204,17 @@ class Request
         return $result['data'] ?? true;
     }
 
-    public function setOption($name, $value, $permanentOption = false)
+    public function setOption($name, $value, $permanentOption = false): void
     {
         $this->curlRequest->setOption($name, $value, $permanentOption);
     }
 
-    public function resetOptions()
+    public function resetOptions(): void
     {
         $this->curlRequest->reset();
     }
 
-    public function resetPermanentOptions()
+    public function resetPermanentOptions(): void
     {
         $this->curlRequest->resetPermanentOptions();
     }

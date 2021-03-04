@@ -6,17 +6,32 @@ final class ClientUser extends Resource
 {
     private const CREATE_CLIENT_USER_RESOURCE = 'clientuser/create';
 
-    public function create($email, $projectId, $clientUserId)
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @param string $clientUserId
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function create(string $email, int $projectId, string $clientUserId)
     {
         $data = [
             'email' => $email,
-            'project_id' => (int)$projectId,
-            'client_user_id' => (int)$clientUserId,
+            'project_id' => $projectId,
+            'client_user_id' => $clientUserId,
         ];
+
         return $this->request->create(self::CREATE_CLIENT_USER_RESOURCE, $data);
     }
 
-    public function getUserFieldsByUser($email, $projectId, $clientUserId)
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @param string $clientUserId
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function getUserFieldsByUser(string $email, int $projectId, string $clientUserId)
     {
         return $this->create($email, $projectId, $clientUserId);
     }

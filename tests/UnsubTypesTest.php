@@ -39,7 +39,7 @@ class UnsubTypesTest extends TestCase
 
         $this->service->request = $this->request;
 
-        $result = $this->service->unsubTypes->getList(1);
+        $result = $this->service->unsubTypes->getList(['id' => 1]);
         $this->assertEquals(['result' => true], $result);
     }
 
@@ -58,13 +58,13 @@ class UnsubTypesTest extends TestCase
 
         $this->service->request = $this->request;
 
-        $result = $this->service->unsubTypes->setDisabledTypes(1, [1, 2, 3]);
+        $result = $this->service->unsubTypes->setDisabledTypes(['id' => 1], [1, 2, 3]);
         $this->assertEquals(['result' => true], $result);
     }
 
     public function testSetDisabledTypesWrongUserData()
     {
-        $result = $this->service->unsubTypes->setDisabledTypes(false, [1, 2, 3]);
+        $result = $this->service->unsubTypes->setDisabledTypes([], [1, 2, 3]);
         $this->assertEquals(false, $result);
     }
 
@@ -77,13 +77,13 @@ class UnsubTypesTest extends TestCase
 
         $this->service->request = $this->request;
 
-        $result = $this->service->unsubTypes->addTypes(1, [1, 2, 3]);
+        $result = $this->service->unsubTypes->addTypes(['id' => 1], [1, 2, 3]);
         $this->assertEquals(['result' => true], $result);
     }
 
     public function testAddTypesWrongUserData()
     {
-        $result = $this->service->unsubTypes->addTypes(false, [1, 2, 3]);
+        $result = $this->service->unsubTypes->addTypes([], [1, 2, 3]);
         $this->assertEquals(false, $result);
     }
 
@@ -96,13 +96,13 @@ class UnsubTypesTest extends TestCase
 
         $this->service->request = $this->request;
 
-        $result = $this->service->unsubTypes->removeTypes(1, [1, 2, 3]);
+        $result = $this->service->unsubTypes->removeTypes(['id' => 1], [1, 2, 3]);
         $this->assertEquals(['result' => true], $result);
     }
 
     public function testRemoveTypesWrongUserData()
     {
-        $result = $this->service->unsubTypes->removeTypes(false, [1, 2, 3]);
+        $result = $this->service->unsubTypes->removeTypes([], [1, 2, 3]);
         $this->assertEquals(false, $result);
     }
 
@@ -115,7 +115,7 @@ class UnsubTypesTest extends TestCase
 
         $this->service->request = $this->request;
 
-        $result = $this->service->unsubTypes->removeAll(1);
+        $result = $this->service->unsubTypes->removeAll(['id' => 1]);
         $this->assertEquals(['result' => true], $result);
     }
 

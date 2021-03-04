@@ -13,9 +13,10 @@ final class Email extends Resource
     /**
      * @param string $email
      * @param bool $sanitize
-     * @return bool
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function check($email, $sanitize = true)
+    public function check(string $email, $sanitize = true)
     {
         return $this->request->create(self::CHECK_EMAIL_RESOURCE, array(
             'email' => $email,
@@ -25,9 +26,10 @@ final class Email extends Resource
     /**
      * @param int $projectId
      * @param string $email
-     * @return bool
+     * @return bool|mixed
+     * @throws \Exception
      */
-    public function validate($projectId, $email)
+    public function validate(int $projectId, string $email)
     {
         return $this->request->create(self::VALIDATE_EMAIL_RESOURCE, array(
             'project' => $projectId,
@@ -37,15 +39,17 @@ final class Email extends Resource
 
     /**
      * @param int $mailId
-     * @return bool
+     * @return bool|mixed
      * @throws \Exception
      */
-    public function trackClickByMailId($mailId)
+    public function trackClickByMailId(int $mailId)
     {
         if (filter_var($mailId, FILTER_VALIDATE_INT) === false) {
             $this->errorHandler->handle(new ValidationException('$mailId is not an integer'));
+
             return false;
         }
+
         return $this->request->create(self::TRACK_CLICK_RESOURCE . $mailId);
     }
 }

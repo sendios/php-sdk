@@ -60,6 +60,6 @@ class PushTest extends TestCase
         $clientKey = 'a1s2d3f4g5h6j7k8l';
         $sendios = new SendiosSdk($clientId, $clientKey);
         $result = $sendios->push->getCategoryTrigger();
-        $this->assertEquals(Push::CATEGORY_TRIGGER, $result);
+        $this->assertEquals(2, $result);
     }
 }

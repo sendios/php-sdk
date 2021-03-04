@@ -14,8 +14,9 @@ final class Webpush extends Resource
     private const CREATE_WEB_PUSH_BY_PROJECT_ID_RESOURCE = 'webpush/project/:projectId';
 
     /**
-     * @param int|array $user
-     * @return bool
+     * @param $user
+     * @return false|mixed
+     * @throws \Exception
      */
     public function unsubscribeByUser($user)
     {
@@ -25,29 +26,33 @@ final class Webpush extends Resource
         }
 
         $result = $this->request->create(strtr(self::UNSUB_BY_USER_ID_RESOURCE, [':pushUserId' => $pushUser['id']]));
+
         return !empty($result['result']) ? $result['result'] : false;
     }
 
     /**
      * @param int $pushUserId
-     * @return bool
+     * @return false|mixed
+     * @throws \Exception
      */
-    public function unsubscribeByPushUser($pushUserId)
+    public function unsubscribeByPushUser(int $pushUserId)
     {
         if (!$pushUserId) {
             return false;
         }
 
         $result = $this->request->create(strtr(self::UNSUB_BY_USER_ID_RESOURCE, [':pushUserId' => $pushUserId]));
+
         return !empty($result['result']) ? $result['result'] : false;
     }
 
     /**
-     * @param int $projectId
-     * @param string $hash
-     * @return bool
+     * @param $projectId
+     * @param $hash
+     * @return false|mixed
+     * @throws \Exception
      */
-    public function unsubscribeByProjectIdAndHash($projectId, $hash)
+    public function unsubscribeByProjectIdAndHash(int $projectId, string $hash)
     {
         $pushUser = $this->getPushUserByProjectIdAndHash($projectId, $hash);
         if (!$pushUser || !$pushUser['id']) {
@@ -55,12 +60,14 @@ final class Webpush extends Resource
         }
 
         $result = $this->request->create(strtr(self::UNSUB_BY_USER_ID_RESOURCE, [':pushUserId' => $pushUser['id']]));
+
         return !empty($result['result']) ? $result['result'] : false;
     }
 
     /**
-     * @param array|int $user
-     * @return bool
+     * @param $user
+     * @return false|mixed
+     * @throws \Exception
      */
     public function subscribeByUser($user)
     {
@@ -70,11 +77,17 @@ final class Webpush extends Resource
         }
 
         $result = $this->request->delete(strtr(self::SUB_BY_USER_ID_RESOURCE, [':pushUserId' => $pushUser['id']]));
+
         return !empty($result['result']) ? $result['result'] : false;
     }
 
-
-    public function subscribeByHash($projectId, $hash)
+    /**
+     * @param int $projectId
+     * @param string $hash
+     * @return false|mixed
+     * @throws \Exception
+     */
+    public function subscribeByHash(int $projectId, string $hash)
     {
         $pushUser = $this->getPushUserByProjectIdAndHash($projectId, $hash);
         if (!$pushUser || !$pushUser['id']) {
@@ -82,22 +95,23 @@ final class Webpush extends Resource
         }
 
         $result = $this->request->delete(strtr(self::SUB_BY_USER_ID_RESOURCE, [':pushUserId' => $pushUser['id']]));
+
         return !empty($result['result']) ? $result['result'] : false;
     }
 
     /**
-     * @param array|int $user
+     * @param $user
      * @param string $title
-     * @param $text
+     * @param string $text
      * @param string $url
      * @param string $iconUrl
      * @param int $typeId
      * @param array $meta
-     * @param null $imageUrl
-     * @return bool
+     * @param string|null $imageUrl
+     * @return false|mixed
      * @throws \Exception
      */
-    public function sendByUser($user, $title, $text, $url, $iconUrl, $typeId, $meta = [], $imageUrl = null)
+    public function sendByUser($user, string $title, string $text, string $url, string $iconUrl, int $typeId, array $meta = [], ?string $imageUrl = null)
     {
         $pushUser = $this->getPushUserByUser($user);
         if (!$pushUser || !$pushUser['id']) {
@@ -117,24 +131,38 @@ final class Webpush extends Resource
         ];
 
         $result = $this->request->create(self::SEND_WEB_PUSH_RESOURCE, $webpushMessage);
+
         return !empty($result['result']) ? $result['result'] : false;
     }
 
     /**
-     * @param $projectId
-     * @param $hash
+     * @param int $projectId
+     * @param string $hash
      * @param string $title
+     * @param string $text
      * @param string $url
      * @param string $iconUrl
      * @param int $typeId
      * @param array $meta
-     * @param array $webpushMessage
+     * @param string|null $imageUrl
+     * @return false|mixed
+     * @throws \Exception
      */
-    public function sendByProjectIdAndHash($projectId, $hash, $title, $text, $url, $iconUrl, $typeId, $meta = [], $imageUrl = null)
-    {
+    public function sendByProjectIdAndHash(
+        int $projectId,
+        string $hash,
+        string $title,
+        string $text,
+        string $url,
+        string $iconUrl,
+        int $typeId,
+        array $meta = [],
+        ?string $imageUrl = null
+    ) {
         $pushUser = $this->getPushUserByProjectIdAndHash($projectId, $hash);
-        if (!$pushUser || !$pushUser['id']) {
+        if (empty($pushUser) || !$pushUser['id']) {
             $this->errorHandler->handle(new ValidationException('PushUser was not found'));
+
             return false;
         }
 
@@ -150,22 +178,32 @@ final class Webpush extends Resource
         ];
 
         $result = $this->request->create(self::SEND_WEB_PUSH_RESOURCE, $webpushMessage);
+
         return !empty($result['result']) ? $result['result'] : false;
     }
 
     /**
      * @param int $projectId
-     * @param $title
-     * @param $text
-     * @param $url
-     * @param $iconUrl
-     * @param $typeId
+     * @param string $title
+     * @param string $text
+     * @param string $url
+     * @param string $iconUrl
+     * @param int $typeId
      * @param array $meta
-     * @param string $imageUrl
-     * @return bool
+     * @param string|null $imageUrl
+     * @return false|mixed
+     * @throws \Exception
      */
-    public function sendByProject($projectId, $title, $text, $url, $iconUrl, $typeId, $meta = [], $imageUrl = null)
-    {
+    public function sendByProject(
+        int $projectId,
+        string $title,
+        string $text,
+        string $url,
+        string $iconUrl,
+        int $typeId,
+        array $meta = [],
+        ?string $imageUrl = null
+    ) {
         $webpushMessage = [
             'project_id' => $projectId,
             'title' => $title,
@@ -178,12 +216,14 @@ final class Webpush extends Resource
         ];
 
         $result = $this->request->create(self::SEND_WEB_PUSH_RESOURCE, $webpushMessage);
+
         return !empty($result['result']) ? $result['result'] : false;
     }
 
     /**
-     * @param array|int $user
-     * @return bool
+     * @param $user
+     * @return false|mixed
+     * @throws \Exception
      */
     protected function getPushUserByUser($user)
     {
@@ -196,31 +236,35 @@ final class Webpush extends Resource
         }
 
         $result = $this->request->receive(strtr(self::GET_WEB_PUSH_BY_USER_ID_RESOURCE, [':userId' => $user['id']]));
+
         return !empty($result['result']) ? $result['result'] : false;
     }
 
     /**
      * @param int $projectId
      * @param string $hash
-     * @return bool
+     * @return false|mixed
+     * @throws \Exception
      */
-    protected function getPushUserByProjectIdAndHash($projectId, $hash)
+    protected function getPushUserByProjectIdAndHash(int $projectId, string $hash)
     {
         $result = $this->request->receive(strtr(self::GET_WEB_PUSH_BY_PROJECT_ID_AND_HASH_RESOURCE, [
             ':projectId' => $projectId,
             ':hash' => $hash
         ]));
+
         return !empty($result['result']) ? $result['result'] : false;
     }
 
     /**
      * @param array $user
-     * @param $url
-     * @param $publicKey
-     * @param $authToken
-     * @return bool|int
+     * @param string $url
+     * @param string $publicKey
+     * @param string $authToken
+     * @return false|mixed
+     * @throws \Exception
      */
-    public function createPushUser(array $user, $url, $publicKey, $authToken)
+    public function createPushUser(array $user, string $url, string $publicKey, string $authToken)
     {
         if (!$user) {
             $this->errorHandler->handle(new ValidationException('User was not found.'));
@@ -248,6 +292,7 @@ final class Webpush extends Resource
         );
 
         $result = $this->request->create(strtr(self::CREATE_WEB_PUSH_BY_PROJECT_ID_RESOURCE, [':projectId' => $projectId]), $sendData);
+
         return !empty($result['push_user_id']) ? $result['push_user_id'] : false;
     }
 }

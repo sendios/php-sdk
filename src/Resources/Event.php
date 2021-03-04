@@ -8,7 +8,8 @@ final class Event extends Resource
 
     /**
      * @param array $data
-     * @return bool
+     * @return bool|mixed
+     * @throws \Exception
      */
     public function send(array $data = [])
     {

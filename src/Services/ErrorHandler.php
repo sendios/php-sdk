@@ -4,8 +4,8 @@ namespace Sendios\Services;
 
 class ErrorHandler
 {
-    const MODE_ERROR = 1;
-    const MODE_EXCEPTION = 2;
+    public const MODE_ERROR = 1;
+    public const MODE_EXCEPTION = 2;
 
     private $mode;
 
@@ -14,7 +14,11 @@ class ErrorHandler
         $this->setErrorMode($mode);
     }
 
-    public function handle(\Exception $e)
+    /**
+     * @param \Exception $e
+     * @throws \Exception
+     */
+    public function handle(\Exception $e): void
     {
         if ($this->mode === self::MODE_EXCEPTION) {
             throw $e;
@@ -31,9 +35,8 @@ class ErrorHandler
         error_log($logMessage);
     }
 
-    public function setErrorMode($mode)
+    public function setErrorMode($mode): void
     {
         $this->mode = $mode;
     }
 }
-

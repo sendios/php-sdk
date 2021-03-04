@@ -11,11 +11,10 @@ final class Goal extends Resource
 
     /**
      * @param array $data
-     * @return array
+     * @return array|int[]|string[]
      */
-    public function createGoal(array $data)
+    public function createGoal(array $data): array
     {
-
         $resultArray = ['goals_added' => 0];
 
         foreach ($data as $dataItem) {
@@ -26,7 +25,7 @@ final class Goal extends Resource
             $this->validGoals[] = $validData;
         }
 
-        if (count($this->validGoals) == 0) {
+        if (count($this->validGoals) === 0) {
             return array_merge($resultArray, $this->invalidGoals);
         }
 
@@ -34,16 +33,19 @@ final class Goal extends Resource
 
         if ($sendStatus) {
             $resultArray['goals_added'] = count($this->validGoals);
+
             return array_merge($resultArray, $this->invalidGoals);
         }
 
         return array_merge($resultArray, ['errors' => 'Sending data error!']);
-
     }
 
+    /**
+     * @param array $data
+     * @return array|false
+     */
     private function validateData(array $data)
     {
-
         $invalidItem = ['error_messages' => []];
 
         $filterOptions = [
@@ -73,11 +75,10 @@ final class Goal extends Resource
             $invalidItem['message'] = "Validation error";
             $invalidItem['goal_data'] = implode(';', $data);
             $this->invalidGoals[] = $invalidItem;
+
             return false;
         }
 
         return $data;
-
     }
-
 }

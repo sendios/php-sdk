@@ -4,15 +4,15 @@ namespace Sendios\Services;
 
 class CurlRequest
 {
-    private $handle = null;
+    private $handle;
     protected $permanentOptions = [];
 
-    public function __construct($url = '')
+    public function __construct(string $url = '')
     {
         $this->handle = curl_init($url);
     }
 
-    public function setOption($name, $value, $permanentOption = false)
+    public function setOption($name, $value, $permanentOption = false): void
     {
         if ($permanentOption) {
             $this->permanentOptions[$name] = $value;
@@ -32,37 +32,36 @@ class CurlRequest
         return curl_getinfo($this->handle, $name);
     }
 
-    public function close()
+    public function close(): void
     {
         curl_close($this->handle);
     }
 
-    public function reset()
+    public function reset(): void
     {
         curl_reset($this->handle);
     }
 
-    public function resetPermanentOptions()
+    public function resetPermanentOptions(): void
     {
         $this->permanentOptions = [];
     }
 
-    public function getErrorNo()
+    public function getErrorNo(): int
     {
         return curl_errno($this->handle);
     }
 
-    public function getError()
+    public function getError(): string
     {
         return curl_error($this->handle);
     }
 
 
-    protected function setPermanentOptions()
+    protected function setPermanentOptions(): void
     {
         foreach ($this->permanentOptions as $name => $value) {
             $this->setOption($name, $value);
         }
     }
-
 }
