@@ -2,7 +2,7 @@
 
 namespace Sendios\Exception;
 
-use Exception;
+use \Exception;
 
 class ValidationException extends Exception
 {
