@@ -548,6 +548,24 @@ $result = $sendios->user->addPaymentByUser($user, $startDate, $expireDate, $paym
 // $result is a boolean status
 ```
 
+```shell
+curl -X POST https://api.sendios.io/v3/lastpayment \
+    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
+    -d 'JSON_DATA'
+```
+
+```json
+JSON_DATA
+{
+    "user_id": 1, //User id in sendios
+    "start_date": "1509617696", //Payment date or subscription start date 
+    "expire_date": "1609617696", //Subscription end date (optional, default false)
+    "total_count": "14", //Pay count (optional, default false)
+    "payment_type": "1", //Pay type (optional, default false)
+    "amount": "20" //Pay amount (optional, default false)
+}
+```
+
 Attempt to send incorrect data
 ```php
 $sendios = new \Sendios(3,'GH3ir1ZDMjRkNzg4MzgzE3MjU');
