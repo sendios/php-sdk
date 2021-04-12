@@ -34,6 +34,9 @@ curl -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
 # 957081746b54977d51bef9fc74f4d4fd023bab13 is sha1 of clientToken (a1s2d3f4g5h6j7k8l)
 ```
 
+Error with text "Authorization base64 data wrong or invalid" means that you provided wrong clientId or clientToken
+
+
 
 ## Sending email via PHP SDK
 ```php
