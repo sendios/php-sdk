@@ -3,11 +3,15 @@ Sendios is email marketing company https://sendios.io <br>
 Below you can find the technical documentation of integration with our platform.<br>
 You can use this PHP library, if PHP is your backend language, or do HTTP requests (cURL) with any other.
 
-- Installing
-- Providing account info and credentials
-- Sending email
-- Email validation
-- 
+- [Providing account info and credentials](https://github.com/sendios/php-sdk#providing-account-info-and-credentials)
+- [Sending email](https://github.com/sendios/php-sdk#sending-email-via-php-sdk)
+- [Email validation](https://github.com/sendios/php-sdk#check-email)
+- [User info](https://github.com/sendios/php-sdk#user-info)
+- [User's custom fields](https://github.com/sendios/php-sdk#create-and-update-user-data)
+- [Unsubscribe](https://github.com/sendios/php-sdk#unsubscribe)
+- [Online on product](https://github.com/sendios/php-sdk#online)
+- [Payments on product](https://github.com/sendios/php-sdk#payments)
+- [Custom product events](https://github.com/sendios/php-sdk#product-events)
 
 
 ## Installing PHP SDK
