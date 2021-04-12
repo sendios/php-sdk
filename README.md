@@ -113,6 +113,21 @@ curl -X POST https://api.sendios.io/v1/push/system \
     }
 }
 ```
+# Webhooks about sending status
+You can setup webhooks in project's settings (admin panel) URL API point for receiving events than happens with letter.
+For example you can use service https://webhook.site that alllow watch events online.
+
+Example of webhooks:
+- queue
+- reject
+- sent
+- open
+- click
+
+And reason of rejecting (email not sent):
+
+
+More about webhooks 
 
 
 # Check email
