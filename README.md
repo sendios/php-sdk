@@ -1,23 +1,26 @@
-# API info and PHP SDK
+# Sendios API and PHP SDK
+Sendios is email marketing company https://sendios.io <br>
+Below you can find the technical documentation of integration with our platform.<br>
+You can use this PHP library, if PHP is your backend language, or do HTTP requests (cURL) with any other.
 
-## Start
-You can install PHP SDK
-```sh
+- Installing
+- Providing account info and credentials
+- Sending email
+- Email validation
+- 
+
+
+## Installing PHP SDK
+```shell
 composer require sendios/php-sdk
 ```
-Or make HTTP requests via cURL/any
 
-## Signing of requests via auth
+## Providing account info and credentials
 ```php
 # PHP SDK
 $clientId = 123;
 $clientToken = 'a1s2d3f4g5h6j7k8l';
 $sendios = new \Sendios\SendiosSdk($clientId, $clientToken);
-```
-```php
-# PHP cURL
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_USERPWD, '123:' . sha1('a1s2d3f4g5h6j7k8l'));
 ```
 
 ```shell
@@ -105,8 +108,8 @@ curl -X POST https://api.sendios.io/v1/push/system \
 ```
 
 
-# Other API methods
-## Check email
+# Check email
+Email validation
 ```php
 $result = $sendios->email->check('Test@Example.com');
 /* Returned array(
@@ -125,42 +128,146 @@ curl -X POST https://api.sendios.io/v1/email/check \
     -d '{"email":"Test@Example.com"}'
 ```
 
-## Validate email with send
-```php
-$result = $sendios->email->validate($projectId, 'Test@Example.com');
-/* Returned array(
-  'orig' => 'Test@Example.com',
-  'valid' => false, // result
-  'reason' => 'send_fail', // reason of result
-  'email' => 'test@example.com', // fixed email
-  'vendor' => 'Unknown', // vendor name like Gmail
-  'domain' => 'example.com',
-  'trusted' => false,
-  'is_send': true
-) */
-```
-```shell
-curl -X POST https://api.sendios.io/v1/email/check/send \
-    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
-    -d '{"email":"Test@Example.com","project": 9}'
-```
-
-# User info by Email and Project
+# User
+## User info
 ```php
 $projectId = 1;
-$user = $sendios->user->getByEmail('test@example.com', $projectId);
+// Make GET to /user/project/PROJECT_ID/email/Test@Example.com
+$user = $sendios->user->getByEmail('Test@Example.com', $projectId);
 /* Returned array(
-    "id": 8424, // USED IN MOST API METHODS
+    "id":8424,
     "project_id":1,
     "email":"test@example.com",
     "name":"John",
+    "gender":"m",
+    "country":"UKR",
+    "language":"en",
     ...
 ) */
 ```
+
 ```shell
 curl -X GET https://api.sendios.io/v1/user/project/1/email/test@example.com \
     -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
 ```
+
+## Create and update user data
+```php
+$fields = [
+    'name' => 'John Dou',
+    'gender' => 'm', //m or f
+    'age' => 21, //int
+    'photo' => 'http://moheban-ahlebeit.com/images/Face-Wallpaper/Face-Wallpaper-26.jpg',//image url
+    'ak' => 'FFZxYfCfGgNDvmZRqnELYqU7',//Auth key
+    'vip' => 1, //int
+    'language' => 'es', //ISO 639-1
+    'country' => 'esp', //ISO 3166-1 alpha-3 or ISO 3166-1 alpha-2
+    'platform_id' => $sendios->user->getPlatformDesktop(),
+    'list_id' => 1,
+    'status' => 0, //int
+    'partner_id' => 1, //int
+
+    // Your own custom fields may be here
+    // allowed only int values
+    'field1' => 542, //int
+    'sessions_count' => 22, //int
+    'session_last' => 1498137772, //unix timestamp
+];
+```
+By email and project ID
+
+```php
+$result = $sendios->user->setUserFieldsByEmailAndProjectId('ercling@yandex.ru', 2, $fields);
+// $result is a boolean status
+```
+
+```shell
+curl -X PUT https://api.sendios.io/v1/userfields/project/1/emailhash/dGVzdEBleGFtcGxlLmNvbQ== \
+    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
+    -d 'JSON_DATA'
+
+# 'dGVzdEBleGFtcGxlLmNvbQ==' - base64_encode(test@example.com) 
+```
+
+```json
+JSON_DATA
+{
+    "name": "John Dou",
+    "gender": "m",
+    "age": 21,
+    "photo": "http://moheban-ahlebeit.com/images/Face-Wallpaper/Face-Wallpaper-26.jpg",
+    "ak": "FFZxYfCfGgNDvmZRqnELYqU7",
+    "vip": 1,
+    "language": "es",
+    "country": "esp",
+    "platform_id": 1,
+    "list_id": 1,
+    "status": 0, 
+    "partner_id": 1,
+    "field1": 542,
+    "sessions_count": 22,
+    "session_last": 1498137772
+}
+```
+
+By user
+
+```php
+$user = $sendios->user->getById(892396028);
+$result = $sendios->user->setUserFieldsByUser($user, $fields);
+// $result is a boolean status
+```
+
+```shell
+curl -X PUT https://api.sendios.io/v1/userfields/user/5234 \
+    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
+    -d 'JSON_DATA'
+
+# 5234 - user_id
+```
+
+```json
+JSON_DATA
+{
+    "field1": 542,
+    "field2": 22,
+    "field3": 1498137772
+}
+```
+
+## Get user custom fields
+
+```php
+$result = $sendios->user->getUserFieldsByEmailAndProjectId('ercling@yandex.ru', 1);
+// or
+$result = $sendios->user->getUserFieldsByUser($user);
+/*
+Returns [
+    'user' => [
+        'id' => 892396028,
+        'project_id' => 1,
+         ...
+    ],
+    'custom_fields' => [
+        'sessions_count' => 22,
+         ...
+    ],
+]
+*/
+```
+
+```shell
+curl -X GET https://api.sendios.io/v1/userfields/user/5234\
+    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
+
+# 5234 - user_id     
+```
+
+```shell
+curl -X GET https://api.sendios.io/v1/userfields/project/1/email/test@example.com \
+    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
+```
+
 
 # Unsubscribe
 ```php
@@ -345,149 +452,8 @@ curl -X DELETE https://api.sendios.io/v1/unsubtypes/all/[SENDIOS_USER_ID] \
     -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
 ```
 
-
-# User
-## User info
-```php
-$projectId = 1;
-// Make GET to /user/project/PROJECT_ID/email/Test@Example.com
-$user = $sendios->user->getByEmail('Test@Example.com', $projectId);
-/* Returned array(
-    "id":8424,
-    "project_id":1,
-    "email":"test@example.com",
-    "name":"John",
-    "gender":"m",
-    "country":"UKR",
-    "language":"en",
-    ...
-) */
-```
-
-```shell
-curl -X GET https://api.sendios.io/v1/user/project/1/email/test@example.com \
-    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
-```
-
-## Create and update user data
-```php
-$fields = [
-    'name' => 'John Dou',
-    'gender' => 'm', //m or f
-    'age' => 21, //int
-    'photo' => 'http://moheban-ahlebeit.com/images/Face-Wallpaper/Face-Wallpaper-26.jpg',//image url
-    'ak' => 'FFZxYfCfGgNDvmZRqnELYqU7',//Auth key
-    'vip' => 1, //int
-    'language' => 'es', //ISO 639-1
-    'country' => 'esp', //ISO 3166-1 alpha-3 or ISO 3166-1 alpha-2
-    'platform_id' => $sendios->user->getPlatformDesktop(),
-    'list_id' => 1,
-    'status' => 0, //int
-    'partner_id' => 1, //int
-
-    // Your own custom fields may be here
-    // allowed only int values
-    'field1' => 542, //int
-    'sessions_count' => 22, //int
-    'session_last' => 1498137772, //unix timestamp
-];
-```
-By email and project ID
-
-```php
-$result = $sendios->user->setUserFieldsByEmailAndProjectId('ercling@yandex.ru', 2, $fields);
-// $result is a boolean status
-```
-
-```shell
-curl -X PUT https://api.sendios.io/v1/userfields/project/1/emailhash/dGVzdEBleGFtcGxlLmNvbQ== \
-    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
-    -d 'JSON_DATA'
-
-# 'dGVzdEBleGFtcGxlLmNvbQ==' - base64_encode(test@example.com) 
-```
-
-```json
-JSON_DATA
-{
-    "name": "John Dou",
-    "gender": "m",
-    "age": 21,
-    "photo": "http://moheban-ahlebeit.com/images/Face-Wallpaper/Face-Wallpaper-26.jpg",
-    "ak": "FFZxYfCfGgNDvmZRqnELYqU7",
-    "vip": 1,
-    "language": "es",
-    "country": "esp",
-    "platform_id": 1,
-    "list_id": 1,
-    "status": 0, 
-    "partner_id": 1,
-    "field1": 542,
-    "sessions_count": 22,
-    "session_last": 1498137772
-}
-```
-
-By user
-
-```php
-$user = $sendios->user->getById(892396028);
-$result = $sendios->user->setUserFieldsByUser($user, $fields);
-// $result is a boolean status
-```
-
-```shell
-curl -X PUT https://api.sendios.io/v1/userfields/user/5234 \
-    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
-    -d 'JSON_DATA'
-
-# 5234 - user_id
-```
-
-```json
-JSON_DATA
-{
-    "field1": 542,
-    "field2": 22,
-    "field3": 1498137772
-}
-```
-
-## Get user custom fields
-
-```php
-$result = $sendios->user->getUserFieldsByEmailAndProjectId('ercling@yandex.ru', 1);
-// or
-$result = $sendios->user->getUserFieldsByUser($user);
-/*
-Returns [
-    'user' => [
-        'id' => 892396028,
-        'project_id' => 1,
-         ...
-    ],
-    'custom_fields' => [
-        'sessions_count' => 22,
-         ...
-    ],
-]
-*/
-```
-
-```shell
-curl -X GET https://api.sendios.io/v1/userfields/user/5234\
-    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
-
-# 5234 - user_id     
-```
-
-```shell
-curl -X GET https://api.sendios.io/v1/userfields/project/1/email/test@example.com \
-    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
-```
-
-## Online
-Update online by user id
+# Online
+Online on product. Useful in loggics and personalization
 ```php
 $sendios->user->setOnlineByUser($user, new \DateTime());
 ```
