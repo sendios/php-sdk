@@ -5,6 +5,7 @@ You can use this PHP library, if PHP is your backend language, or do HTTP reques
 
 - [Providing account info and credentials](https://github.com/sendios/php-sdk#providing-account-info-and-credentials)
 - [Sending email](https://github.com/sendios/php-sdk#sending-email-via-php-sdk)
+- [Webhooks about emails](https://github.com/sendios/php-sdk#webhooks-about-sending-status)
 - [Email validation](https://github.com/sendios/php-sdk#check-email)
 - [User info](https://github.com/sendios/php-sdk#user-info)
 - [User's custom fields](https://github.com/sendios/php-sdk#create-and-update-user-data)
