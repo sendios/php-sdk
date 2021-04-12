@@ -71,11 +71,7 @@ $meta = [
 curl -X POST https://api.sendios.io/v1/push/system \
     -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
     -d 'JSON_DATA'
-
-# or https://api.sendios.io/v1/push/trigger for trigger letters
-# 957081746b54977d51bef9fc74f4d4fd023bab13 is sha1 of clientToken (a1s2d3f4g5h6j7k8l)
 ```
-
 ```json
 {
     "type_id": 1,
@@ -84,9 +80,7 @@ curl -X POST https://api.sendios.io/v1/push/system \
     "project_id": 1,
     "data": {
         "user": {
-            "email": "test@example.com",
-            "name": "John",
-            "age": 22
+            "email": "test@example.com"
         },
         "some": "hi",
         "letter": "John",
@@ -97,6 +91,10 @@ curl -X POST https://api.sendios.io/v1/push/system \
     }
 }
 ```
+push/system or https://api.sendios.io/v1/push/trigger for trigger letters <br>
+957081746b54977d51bef9fc74f4d4fd023bab13 is sha1 of clientToken (a1s2d3f4g5h6j7k8l)
+
+
 # Webhooks about sending status
 You can setup webhooks in project's settings (admin panel) URL API point for receiving events than happens with letter.
 For example you can use service https://webhook.site that alllow watch events online.
