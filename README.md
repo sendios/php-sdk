@@ -124,10 +124,10 @@ Example of webhooks:
 - open
 - click
 
-And reason of rejecting (email not sent):
+And reason of rejecting (email not sent):<br>
+<img src="https://github.com/sendios/php-sdk/blob/master/docs/webhook_example.png?raw=true" width="400px">
 
-
-More about webhooks 
+More about webhooks https://github.com/sendios/docs/wiki/Webhooks
 
 
 # Check email
