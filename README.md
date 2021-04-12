@@ -155,6 +155,16 @@ curl -X GET https://api.sendios.io/v1/user/project/1/email/test@example.com \
     -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
 ```
 
+## Providing user_id on Product
+We call that Client's User ID
+```php
+$email = 'john@gmail.com';
+$projectId = 1;
+$clientUserId = 1;
+
+$sendios->clientUser->create($email, $projectId, $clientUserId);
+```
+
 ## Create and update user data
 ```php
 $fields = [
@@ -641,7 +651,6 @@ array(3) {
 */
 ```
 
-
 ## Send goals without sdk
 
 ```php
@@ -662,17 +671,6 @@ Name | Type | Description
 `email`|`string`| **Required.** User email 
 `project_id`|`int`| **Required.** Id of your project. You can find it at https://admin.sendios.io/account/projects 
 `mail_id`|`int`| Mail id after which the user made a goal
-
-
-# Client's ID on product
-```php
-$email = 'john@gmail.com';
-$projectId = 1;
-$clientUserId = 1;
-
-$sendios->clientUser->create($email, $projectId, $clientUserId);
-```
-
 
 # Product Events
 Data format
