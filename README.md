@@ -135,16 +135,21 @@ More about webhooks https://github.com/sendios/docs/wiki/Webhooks
 Email validation
 ```php
 $result = $sendios->email->check('Test@Example.com');
-/* Returned array(
-  'orig' => 'Test@Example.com',
-  'valid' => false, // result
-  'reason' => 'mx_record', // reason of result
-  'email' => 'test@example.com', // fixed email
-  'vendor' => 'Unknown', // vendor name like Gmail
-  'domain' => 'example.com',
-  'trusted' => false,
-) */
 ```
+
+Result:
+```json
+{
+    "reason":"mx_record",
+    "orig":"Test@Example.com",
+    "valid":false,
+    "email":"Test@Example.com",
+    "vendor":"Unknown",
+    "domain":"Example.com",
+    "trusted":false
+}
+```
+
 ```shell
 curl -X POST https://api.sendios.io/v1/email/check \
     -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
