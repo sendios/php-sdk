@@ -41,47 +41,30 @@ Error with text "Authorization base64 data wrong or invalid" means that you prov
 
 ## Sending email via PHP SDK
 ```php
-// Required params for letter
+$email = 'test@example.com'; // for matching or creating user
+
+$projectId = 1; // in your admin panel
 $typeId = 1; // letter id (aka type_id)
 $categoryId = $sendios->push->getCategorySystem(); // system or trigger
-$projectId = 1; // in your admin panel
-$email = 'test@example.com'; // for matching user
 
-// User will be autocreated via any first letter
-
-// Variables for letter
-$data = [ // Data for letter
+$letterData = [
     'some' => 'hi',
     'letter' => 'John',
     'variables' => '!',
 ];
 
-// User info, that will be saved [not required]
-$user = [
-    'name' => 'John',
-    'age' => '22',
-    'gender' => 'm',
-    'language' => 'en',
-    'country' => 'US',
-    'platform_id' => $sendios->user->getPlatformDesktop(),
-    'vip' => 0,
-    'photo' => 'http://example.com/somephotourl.jpg',
-    'channel_id' => 42,
-    'subchannel_id' => 298,
-    'client_user_id' => '123xyz'
-];
+$sendios->push->send($typeId, $categoryId, $projectId, $email, [], $letterData, []);
+# response: {"queued":true}
+```
+
+Additionally you can add meta info for tracking
+```php
 // Your data, that will be sent with our webhooks
 $meta = [
     'tracking_id' => 72348234,
 ];
-
-// Sending
-$response = $sendios->push->send($typeId, $categoryId, $projectId, $email, $user, $data, $meta);
-// it will make POST to /push/system or /push/trigger with json http://pastebin.com/raw/Dy3VeZpB
-
-var_dump($response);
-// 
 ```
+
 
 ## Sending email via cURL
 ```shell
