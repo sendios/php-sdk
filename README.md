@@ -137,6 +137,33 @@ curl -X POST https://api.sendios.io/v1/email/check \
     -d '{"email":"Test@Example.com"}'
 ```
 
+# Requesting events
+Our system can choose best time to notify user, and request sending trigger email to him.<br>
+For this purpose you can build API point, that receives tris request, and sends trigger letter <br>
+Your API point will receive POST request with theese parameters:
+```json
+{
+    "project_id": 123, // Sendios
+    "email": "test@example.com",
+    "type_id": 1,
+    "source_id": 1
+}
+```
+Optional parameters:
+```json
+{
+    "client_user_id": 123234, // Your userId on product
+    "token": "awo7tiwafhiajwk8ehc"
+}
+```
+You can test your API point with this cURL request:
+```shell
+curl -X POST https://api.yourproduct.com/sendios/requestevent \
+    -d '{"project_id": 123, "email": "test@example.com", "type_id": 1}'
+```
+
+
+
 # User
 ## User info
 ```php
