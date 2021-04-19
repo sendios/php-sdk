@@ -12,7 +12,6 @@ You can use this PHP library, if PHP is your backend language, or do HTTP reques
 - [Unsubscribe](https://github.com/sendios/php-sdk#unsubscribe)
 - [Online on product](https://github.com/sendios/php-sdk#online)
 - [Payments on product](https://github.com/sendios/php-sdk#payments)
-- [Custom product events](https://github.com/sendios/php-sdk#product-events)
 
 
 ## Installing PHP SDK
@@ -606,43 +605,6 @@ if (!$result){
 //    string(44) "Field vip does not match the required format"
 //  }
 //}
-```
-
-# Product Events
-Data format
-
-Name | Type | Description
--------|------|-------
-`project_id`|`int`| **Required.** User project id
-`event_id`|`int`| **Required.** Event id 
-`uid`|`bigint`| **Required.** uid of event from your product 
-`receiver_id`|`int`| **Required.** Sendios user id whose event occurred
-`sender_id`|`int`| Sendios user (id) associated with the receiver_id 
-`sender_product_id`|`int`| Product user (id) associated with the receiver_id 
-`date`|`string`| Event date. Example: '2018-10-24 19:40:22'
-
-```php
-        $projectId = 1;
-        $eventId = 1;
-        $uid = 1;
-        $receiverId = 1;
-        $senderId = 1;
-        $senderProductId = 1;
-        $date = '2018-10-24 19:40:22';
-
-        $event = [
-            'project_id' => $projectId,
-            'event_id' => $eventId,
-            'uid' => $uid,
-            'receiver_id' => $receiverId,
-            'sender_id' => $senderId,
-            'sender_product_id' => $senderProductId,
-            'date' => $date,
-        ];
-        
-        $events[] = $event;
-        
-        $sendios->event->send($events);
 ```
 
 # Other
