@@ -39,6 +39,9 @@ Error with text "Authorization base64 data wrong or invalid" means that you prov
 
 
 ## Sending email via PHP SDK
+Before sending you have to setup [DKIM and SPF DNS records](https://github.com/sendios/docs/wiki/Sender-Domain-settings)
+
+
 ```php
 $email = 'test@example.com'; // for matching or creating user
 
