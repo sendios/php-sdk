@@ -49,7 +49,7 @@ class SendiosSdk
      */
     public $encrypter;
 
-    private const RESOURCES_PROPERTIES = ['email', 'user', 'unsub', 'unsubTypes', 'webpush', 'goal', 'content', 'event', 'clientUser', 'buying', 'push'];
+    private const RESOURCES_PROPERTIES = ['email', 'user', 'unsub', 'unsubTypes', 'webpush', 'content', 'event', 'clientUser', 'buying', 'push'];
 
     /**
      * SendiosSdk constructor.
