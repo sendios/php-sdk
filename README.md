@@ -4,6 +4,7 @@ Below you can find the technical documentation of integration with our platform.
 You can use this PHP library, if PHP is your backend language, or do HTTP requests (cURL) with any other.
 
 - [Providing account info and credentials](https://github.com/sendios/php-sdk#providing-account-info-and-credentials)
+- [Prepare your sender domain](https://github.com/sendios/php-sdk#setup-dns-records)
 - [Sending email](https://github.com/sendios/php-sdk#sending-email-via-php-sdk)
 - [Webhooks about emails](https://github.com/sendios/php-sdk#webhooks-about-sending-status)
 - [Email validation](https://github.com/sendios/php-sdk#check-email)
@@ -36,12 +37,12 @@ curl -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
 
 Error with text "Authorization base64 data wrong or invalid" means that you provided wrong clientId or clientToken
 
+## Setup DNS records
+You have to setup SPF/DKIM records for sending emails from your domain.<br>
+Read more at [Sender Domain Settings](https://github.com/sendios/docs/wiki/Sender-Domain-settings)
 
 
 ## Sending email via PHP SDK
-Before sending you have to setup [DKIM and SPF DNS records](https://github.com/sendios/docs/wiki/Sender-Domain-settings)
-
-
 ```php
 $email = 'test@example.com'; // for matching or creating user
 
