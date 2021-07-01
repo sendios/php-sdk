@@ -564,7 +564,7 @@ $result = $sendios->user->addPaymentByUser($user, $startDate, $expireDate, $paym
 ```
 
 ```shell
-curl -X POST https://api.sendios.io/v3/lastpayment \
+curl -X POST https://api.sendios.io/v1/lastpayment \
     -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
     -d 'JSON_DATA'
 ```
