@@ -97,6 +97,30 @@ curl -X POST https://api.sendios.io/v1/push/system \
 push/system or https://api.sendios.io/v1/push/trigger for trigger letters <br>
 957081746b54977d51bef9fc74f4d4fd023bab13 is sha1 of clientToken (a1s2d3f4g5h6j7k8l)
 
+# Requesting events
+Our system can choose best time to notify user, and request sending trigger email to him.<br>
+For this purpose you can build API point, that receives tris request, and sends trigger letter <br>
+Your API point will receive POST request with theese parameters:
+```json
+{
+    "project_id": 123, // Sendios
+    "email": "test@example.com",
+    "type_id": 1,
+    "source_id": 1
+}
+```
+Optional parameters:
+```json
+{
+    "client_user_id": 123234, // Your userId on product
+    "token": "awo7tiwafhiajwk8ehc"
+}
+```
+You can test your API point with this cURL request:
+```shell
+curl -X POST https://api.yourproduct.com/sendios/requestevent \
+    -d '{"project_id": 123, "email": "test@example.com", "type_id": 1}'
+```
 
 # Webhooks about sending status
 You can setup webhooks in project's settings (admin panel) URL API point for receiving events than happens with letter.
@@ -139,33 +163,6 @@ curl -X POST https://api.sendios.io/v1/email/check \
     -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
     -d '{"email":"Test@Example.com"}'
 ```
-
-# Requesting events
-Our system can choose best time to notify user, and request sending trigger email to him.<br>
-For this purpose you can build API point, that receives tris request, and sends trigger letter <br>
-Your API point will receive POST request with theese parameters:
-```json
-{
-    "project_id": 123, // Sendios
-    "email": "test@example.com",
-    "type_id": 1,
-    "source_id": 1
-}
-```
-Optional parameters:
-```json
-{
-    "client_user_id": 123234, // Your userId on product
-    "token": "awo7tiwafhiajwk8ehc"
-}
-```
-You can test your API point with this cURL request:
-```shell
-curl -X POST https://api.yourproduct.com/sendios/requestevent \
-    -d '{"project_id": 123, "email": "test@example.com", "type_id": 1}'
-```
-
-
 
 # User
 ## User info
