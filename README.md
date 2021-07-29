@@ -165,7 +165,7 @@ curl -X POST https://api.sendios.io/v1/email/check \
 ```
 
 # User
-## User info
+## Get user info
 ```php
 $projectId = 1;
 // Make GET to /user/project/PROJECT_ID/email/Test@Example.com
@@ -192,9 +192,24 @@ We call that Client's User ID
 ```php
 $email = 'john@gmail.com';
 $projectId = 1;
-$clientUserId = 1;
+$clientUserId = 1234;
 
 $sendios->clientUser->create($email, $projectId, $clientUserId);
+```
+
+```shell
+curl -X POST https://api.sendios.io/v1/clientuser/create \
+    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13 \
+    -d 'JSON_DATA'
+```
+
+```json
+JSON_DATA
+{
+    "email": "john@gmail.com",
+    "project_id": 1,
+    "client_user_id": 1234 
+}
 ```
 
 ## Create and update user data
