@@ -331,17 +331,32 @@ curl -X GET https://api.sendios.io/v1/userfields/project/1/email/test@example.co
 
 
 # Unsubscribe
+Let us know that user dont wont to reveice email notifications.<br>
+If user unsubscribed in our system - we dont pass any emails to him (exept system).<br><br>
+
+For unsub at settings page in your product - use addBySettings method:
 ```php
 $projectId = 1;
 $user = $sendios->user->getByEmail('test@example.com', $projectId);
 $unsub = $sendios->unsub->addBySettings($user);
-// $user - array with $user[id] == 8424 (our user id)
-// addBySettings reason == 9
 ```
 ```shell
 curl -X POST https://api.sendios.io/v1/unsub/8424/source/9 \
     -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
 ```
+
+For unsub at your internal admin panel e.g. support - use addByClient method:
+```php
+$projectId = 1;
+$user = $sendios->user->getByEmail('test@example.com', $projectId);
+$unsub = $sendios->unsub->addByClient($user);
+```
+```shell
+curl -X POST https://api.sendios.io/v1/unsub/8424/source/8 \
+    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
+```
+
+
 
 ## Subscribe back
 ```php
