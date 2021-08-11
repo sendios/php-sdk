@@ -331,7 +331,7 @@ curl -X GET https://api.sendios.io/v1/userfields/project/1/email/test@example.co
 
 
 # Unsubscribe
-Let us know that user dont wont to reveice email notifications.<br>
+Let us know that user don't want to reveice email notifications.<br>
 If user unsubscribed in our system - we dont pass any emails to him (exept system).<br><br>
 
 For unsub at settings page in your product - use addBySettings method:
