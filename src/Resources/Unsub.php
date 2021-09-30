@@ -2,6 +2,7 @@
 
 namespace Sendios\Resources;
 
+use Sendios\Exception\ValidationException;
 use Sendios\Http\Request;
 use Sendios\Services\ErrorHandler;
 
@@ -160,5 +161,27 @@ final class Unsub extends Resource
     public function getByDate(string $date)
     {
         return $this->request->receive("unsub/list/" . strtotime($date));
+    }
+
+    /**
+     * @param string $date
+     * @param int|null $page
+     * @param int|null $pageSize
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function getByDateWithPagination(string $date, ?int $page, ?int $pageSize = null)
+    {
+        $time = strtotime($date);
+        if (!$time) {
+            throw new ValidationException(sprintf('Value \'%s\' must be a valid date', $date));
+        }
+
+        $url = sprintf('unsub/list/%d?page=%d', $time, $page);
+        if ($pageSize && $pageSize > 0) {
+            $url .= sprintf('&page_size=%d', $pageSize);
+        }
+
+        return $this->request->receive($url);
     }
 }

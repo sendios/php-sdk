@@ -472,6 +472,36 @@ curl -X GET https://api.sendios.io/v1/unsub/list/1262307661 \
 # timestamp(2010-01-01) = 1262307661    
 ```
 
+## Get unsubscribed list with pagination
+
+```php
+<?php
+
+$result = $sendios->unsub->getByDateWithPagination('2018-06-10', 12, 100);
+
+//Response example
+return [
+    'pages' => 0,
+    'current_page' => 1,
+    'data' => [
+            0 => [
+                'email' => "jo23lu56@gmail.com",
+                'project_id' => 9,
+                'client_user_id' => NULL,
+                'source_id' => 9,
+                'created_at' => "2018-02-27 20:31:45"
+            ],
+            //...
+    ]
+];
+```
+```shell
+curl -X GET https://api.sendios.io/v1/unsub/list/1262307661?page=1&page_size=1000 \
+    -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
+
+# timestamp(2010-01-01) = 1262307661    
+```
+
 # Unsubscribe from types
 ### Get current unsubs
 ```php
