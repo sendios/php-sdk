@@ -2,6 +2,8 @@
 
 namespace Sendios\Resources;
 
+use Exception;
+use Sendios\Exception\ValidationException;
 use Sendios\Http\Request;
 use Sendios\Services\ErrorHandler;
 
@@ -23,7 +25,7 @@ final class Unsub extends Resource
     /**
      * @param array $user
      * @return bool|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function addByFbl(array $user)
     {
@@ -33,7 +35,7 @@ final class Unsub extends Resource
     /**
      * @param array $user
      * @return bool|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function addByLink(array $user)
     {
@@ -43,7 +45,7 @@ final class Unsub extends Resource
     /**
      * @param array $user
      * @return bool|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function addByClient(array $user)
     {
@@ -53,7 +55,7 @@ final class Unsub extends Resource
     /**
      * @param array $user
      * @return bool|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function addBySettings(array $user)
     {
@@ -63,7 +65,7 @@ final class Unsub extends Resource
     /**
      * @param array $user
      * @return bool|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function subscribe(array $user)
     {
@@ -77,7 +79,7 @@ final class Unsub extends Resource
      * @param array $user
      * @param int $sourceId
      * @return bool|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     protected function addUser(array $user, int $sourceId)
     {
@@ -90,7 +92,7 @@ final class Unsub extends Resource
     /**
      * @param array $user
      * @return bool|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function isUnsubByUser(array $user)
     {
@@ -104,7 +106,7 @@ final class Unsub extends Resource
      * @param string $email
      * @param int $projectId
      * @return bool|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function isUnsubByEmailAndProjectId(string $email, int $projectId)
     {
@@ -120,7 +122,7 @@ final class Unsub extends Resource
      * @param string $email
      * @param int $projectId
      * @return bool|false[]|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function unsubByAdmin(string $email, int $projectId)
     {
@@ -140,7 +142,7 @@ final class Unsub extends Resource
      * @param string $email
      * @param int $projectId
      * @return bool|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUnsubscribeReason(string $email, int $projectId)
     {
@@ -155,10 +157,33 @@ final class Unsub extends Resource
     /**
      * @param string $date
      * @return bool|mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getByDate(string $date)
     {
         return $this->request->receive("unsub/list/" . strtotime($date));
+    }
+
+    /**
+     * @param string $date
+     * @param int|null $page
+     * @param int|null $pageSize
+     * @return bool|mixed
+     * @throws Exception
+     */
+    public function getListByDate(string $date, ?int $page, ?int $pageSize = null)
+    {
+        $time = strtotime($date);
+        if (!$time) {
+            throw new ValidationException(sprintf('Value \'%s\' must be a valid date', $date));
+        }
+        $page = $page ?? 1;
+
+        $url = sprintf('unsub/list/%d/%d', $time, $page);
+        if ($pageSize && $pageSize > 0) {
+            $url .= sprintf('?page_size=%d', $pageSize);
+        }
+
+        return $this->request->receive($url);
     }
 }
