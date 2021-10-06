@@ -502,7 +502,7 @@ return [
 ];
 ```
 ```shell
-curl -X GET https://api.sendios.io/v1/unsub/list/1262307661?page=1&page_size=1000 \
+curl -X GET https://api.sendios.io/v1/unsub/list/1262307661/1?page_size=1000 \
     -u 123:957081746b54977d51bef9fc74f4d4fd023bab13
 
 # timestamp(2010-01-01) = 1262307661    
