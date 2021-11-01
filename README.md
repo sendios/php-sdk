@@ -610,11 +610,12 @@ $expireDate = 1609617696; //Subscription end date (optional, default false)
 $paymentCount = 14; //Pay count (optional, default false)
 $paymentType = 1; //Pay type (optional, default false)
 $amount = 20; //Pay amount (optional, default false)
+$mailId = 12244; //Mail id (optional, default false)
 ```
 By email and project ID
 
 ```php
-$result = $sendios->user->addPaymentByEmailAndProjectId('ercling@yandex.ru', 2, $startDate, $expireDate, $paymentCount, $paymentType, $amount);
+$result = $sendios->user->addPaymentByEmailAndProjectId('ercling@yandex.ru', 2, $startDate, $expireDate, $paymentCount, $paymentType, $amount, $mailId);
 // $result is a boolean status
 ```
 
@@ -622,7 +623,7 @@ By user
 
 ```php
 $user = $sendios->user->getById(892396028);
-$result = $sendios->user->addPaymentByUser($user, $startDate, $expireDate, $paymentCount, $paymentType, $amount);
+$result = $sendios->user->addPaymentByUser($user, $startDate, $expireDate, $paymentCount, $paymentType, $amount, $mailId);
 // $result is a boolean status
 ```
 
@@ -641,6 +642,7 @@ JSON_DATA
     "total_count": "14", //Pay count (optional, default false)
     "payment_type": "1", //Pay type (optional, default false)
     "amount": "20" //Pay amount (optional, default false)
+    "mail_id": "12244" //Mail id(optional, default false)
 }
 ```
 

@@ -232,6 +232,7 @@ class UserTest extends TestCase
                     'total_count' => 10,
                     'payment_type' => 'test',
                     'amount' => 100,
+                    'mail_id' => 12345
                 ])
             ->will($this->returnValue(['added' => true]));
 
@@ -248,7 +249,16 @@ class UserTest extends TestCase
             ->will($this->returnValue(false));
 
         $this->service->request = $this->request;
-        $result = $this->service->user->addPaymentByEmailAndProjectId('test@test.com', 1, time(), time(), 10, 'test', 100);
+        $result = $this->service->user->addPaymentByEmailAndProjectId(
+            'test@test.com',
+            1,
+            time(),
+            time(),
+            10,
+            'test',
+            100,
+            12345
+        );
         $this->assertEquals(false, $result);
     }
 

@@ -222,6 +222,7 @@ final class User extends Resource
      * @param int|null $totalCount
      * @param int|null $paymentType
      * @param int|null $amount
+     * @param int|null $mailId
      * @return bool|mixed
      * @throws \Exception
      */
@@ -232,7 +233,8 @@ final class User extends Resource
         ?int $expireDate = null,
         ?int $totalCount = null,
         ?int $paymentType = null,
-        ?int $amount = null
+        ?int $amount = null,
+        ?int $mailId = null
     ) {
         $user = $this->getByEmail($email, $projectId);
         if (!$user || !$user['id']) {
@@ -260,6 +262,10 @@ final class User extends Resource
             $data['amount'] = $amount;
         }
 
+        if ($mailId) {
+            $data['mail_id'] = $mailId;
+        }
+
         return $this->request->create(self::CREATE_LAST_PAYMENT_RESOURCE, $data);
     }
 
@@ -272,6 +278,7 @@ final class User extends Resource
      * @param int|null $totalCount
      * @param int|null $paymentType
      * @param int|null $amount
+     * @param int|null $mailId
      * @return bool|mixed
      * @throws \Exception
      */
@@ -281,7 +288,8 @@ final class User extends Resource
         ?int $expireDate = null,
         ?int $totalCount = null,
         ?int $paymentType = null,
-        ?int $amount = null
+        ?int $amount = null,
+        ?int $mailId = null
     ) {
         if (empty($user) || !$user['id']) {
             return false;
@@ -306,6 +314,10 @@ final class User extends Resource
 
         if ($amount) {
             $data['amount'] = $amount;
+        }
+
+        if ($mailId) {
+            $data['mail_id'] = $mailId;
         }
 
         return $this->request->create(self::CREATE_LAST_PAYMENT_RESOURCE, $data);
