@@ -2,7 +2,7 @@
 
 namespace Sendios\Resources;
 
-final class User extends Resource
+final class User extends BaseResource
 {
     private const GET_USER_BY_EMAIL_RESOURCE = 'user/project/:projectId/email/:email';
     private const GET_USER_BY_ID_RESOURCE = 'user/id/:userId';

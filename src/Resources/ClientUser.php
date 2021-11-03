@@ -2,7 +2,7 @@
 
 namespace Sendios\Resources;
 
-final class ClientUser extends Resource
+final class ClientUser extends BaseResource
 {
     private const CREATE_CLIENT_USER_RESOURCE = 'clientuser/create';
 

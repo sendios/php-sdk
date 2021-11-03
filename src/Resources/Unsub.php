@@ -7,7 +7,7 @@ use Sendios\Exception\ValidationException;
 use Sendios\Http\Request;
 use Sendios\Services\ErrorHandler;
 
-final class Unsub extends Resource
+final class Unsub extends BaseResource
 {
     public const SOURCE_FBL = 2; // Abuse
     public const SOURCE_LINK = 4; // Link in email

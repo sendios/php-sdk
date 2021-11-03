@@ -2,7 +2,7 @@
 
 namespace Sendios\Resources;
 
-final class Event extends Resource
+final class Event extends BaseResource
 {
     private const CREATE_EVENT_RESOURCE = 'product-event/create';
 
@@ -13,7 +13,7 @@ final class Event extends Resource
      */
     public function send(array $data = [])
     {
-        // simple validation 
+        // simple validation
         if (!is_array($data[0])) {
             return false;
         }

@@ -4,7 +4,7 @@ namespace Sendios\Resources;
 
 use Sendios\Exception\ValidationException;
 
-final class Webpush extends Resource
+final class Webpush extends BaseResource
 {
     private const UNSUB_BY_USER_ID_RESOURCE = 'webpush/unsubscribe/:pushUserId';
     private const SUB_BY_USER_ID_RESOURCE = 'webpush/subscribe/:pushUserId';
