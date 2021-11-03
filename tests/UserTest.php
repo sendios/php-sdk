@@ -230,14 +230,23 @@ class UserTest extends TestCase
                     'user_id' => 123,
                     'expire_date' => $time,
                     'total_count' => 10,
-                    'payment_type' => 'test',
+                    'payment_type' => 1,
                     'amount' => 100,
                     'mail_id' => 12345
                 ])
             ->will($this->returnValue(['added' => true]));
 
         $this->service->request = $this->request;
-        $result = $this->service->user->addPaymentByEmailAndProjectId('test@test.com', 1, $time, $time, 10, 'test', 100);
+        $result = $this->service->user->addPaymentByEmailAndProjectId(
+            'test@test.com',
+            1,
+            $time,
+            $time,
+            10,
+            1,
+            100,
+            12345
+        );
         $this->assertEquals(['added' => true], $result);
     }
 
@@ -255,7 +264,7 @@ class UserTest extends TestCase
             time(),
             time(),
             10,
-            'test',
+            1,
             100,
             12345
         );
@@ -272,20 +281,20 @@ class UserTest extends TestCase
                     'user_id' => 123,
                     'expire_date' => $time,
                     'total_count' => 10,
-                    'payment_type' => 'test',
+                    'payment_type' => 1,
                     'amount' => 100,
                 ])
             ->will($this->returnValue(['added' => true]));
 
         $this->service->request = $this->request;
-        $result = $this->service->user->addPaymentByUser(['id' => 123],$time, $time, 10, 'test', 100);
+        $result = $this->service->user->addPaymentByUser(['id' => 123],$time, $time, 10, 1, 100);
         $this->assertEquals(['added' => true], $result);
     }
 
     public function testAddPaymentByUserWrongUserData()
     {
         $time = time();
-        $result = $this->service->user->addPaymentByUser([],$time, $time, 10, 'test', 100);
+        $result = $this->service->user->addPaymentByUser([],$time, $time, 10, 1, 100);
         $this->assertEquals(false, $result);
     }
 
