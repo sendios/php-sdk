@@ -65,9 +65,6 @@ class SendiosSdk
         if (empty($clientKey)) {
             throw new \InvalidArgumentException('clientKey cannot be empty');
         }
-        if (!is_string($clientKey)) {
-            throw new \InvalidArgumentException('clientKey must be a string');
-        }
 
         $this->clientId = $clientId;
         $this->clientKey = $clientKey;

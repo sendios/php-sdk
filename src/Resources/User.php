@@ -2,7 +2,7 @@
 
 namespace Sendios\Resources;
 
-final class User extends Resource
+final class User extends BaseResource
 {
     private const GET_USER_BY_EMAIL_RESOURCE = 'user/project/:projectId/email/:email';
     private const GET_USER_BY_ID_RESOURCE = 'user/id/:userId';
@@ -15,11 +15,11 @@ final class User extends Resource
     private const CREATE_LAST_PAYMENT_RESOURCE = 'lastpayment';
     private const CONFIRM_BY_EMAIL_AND_PROJECT_ID_RESOURCE = 'users/project/:projectId/email/:emailHash/confirm';
 
-    private const PLATFORM_UNKNOWN = 0;
-    private const PLATFORM_DESKTOP = 1;
-    private const PLATFORM_MOBILE = 2;
-    private const PLATFORM_ANDROID = 3;
-    private const PLATFORM_IOS = 4;
+    public const PLATFORM_UNKNOWN = 0;
+    public const PLATFORM_DESKTOP = 1;
+    public const PLATFORM_MOBILE = 2;
+    public const PLATFORM_ANDROID = 3;
+    public const PLATFORM_IOS = 4;
 
     /**
      * @param string $email

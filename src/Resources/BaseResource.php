@@ -5,7 +5,7 @@ namespace Sendios\Resources;
 use Sendios\Http\Request;
 use Sendios\Services\ErrorHandler;
 
-abstract class Resource
+abstract class BaseResource
 {
     protected $errorHandler;
 

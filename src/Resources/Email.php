@@ -4,7 +4,7 @@ namespace Sendios\Resources;
 
 use Sendios\Exception\ValidationException;
 
-final class Email extends Resource
+final class Email extends BaseResource
 {
     private const CHECK_EMAIL_RESOURCE = 'email/check';
     private const VALIDATE_EMAIL_RESOURCE = 'email/check/send';

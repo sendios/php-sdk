@@ -45,7 +45,7 @@ class UnsubTypesTest extends TestCase
 
     public function testGetListWrongUserData()
     {
-        $result = $this->service->unsubTypes->getList(false);
+        $result = $this->service->unsubTypes->getList([]);
         $this->assertEquals(false, $result);
     }
 
@@ -121,7 +121,7 @@ class UnsubTypesTest extends TestCase
 
     public function testRemoveAllWrongUserData()
     {
-        $result = $this->service->unsubTypes->removeAll(false);
+        $result = $this->service->unsubTypes->removeAll([]);
         $this->assertEquals(false, $result);
     }
 }

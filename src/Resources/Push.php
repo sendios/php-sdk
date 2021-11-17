@@ -6,7 +6,7 @@ use Sendios\Http\Request;
 use Sendios\Services\Encrypter;
 use Sendios\Services\ErrorHandler;
 
-final class Push extends Resource
+final class Push extends BaseResource
 {
     /** @var int */
     private $clientId;

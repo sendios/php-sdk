@@ -14,28 +14,12 @@ use Sendios\Services\ErrorHandler;
 
 class SendiosSdkTest extends TestCase
 {
-    public function testShouldCheckClientIdEmptyValidation()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('clientId cannot be empty');
-
-        new SendiosSdk('', '');
-    }
-
     public function testShouldCheckClientKeyEmptyValidation()
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('clientKey cannot be empty');
 
-        new SendiosSdk('1', '');
-    }
-
-    public function testShouldCheckClientKeyStringValidation()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('clientKey must be a string');
-
-        new SendiosSdk('1', ['lk3kljhow43']);
+        new SendiosSdk(1, '');
     }
 
     public function testShouldCheckPropertyTypes()

@@ -14,7 +14,7 @@ class UnsubTest extends TestCase
      * @var SendiosSdk
      */
     protected $service;
-    
+
     public function setUp(): void
     {
         $clientId = 123;
@@ -46,7 +46,7 @@ class UnsubTest extends TestCase
 
         $this->service->errorHandler->setErrorMode(ErrorHandler::MODE_EXCEPTION);
         $this->service->request = $request;
-        $result = $this->service->unsub->addByFbl(false);
+        $result = $this->service->unsub->addByFbl([]);
 
         $this->assertEquals(false, $result);
     }

@@ -2,7 +2,7 @@
 
 namespace Sendios\Resources;
 
-final class UnsubTypes extends Resource
+final class UnsubTypes extends BaseResource
 {
     /**
      * @param array $user

@@ -4,7 +4,7 @@ namespace Sendios\Resources;
 
 use Sendios\Exception\ValidationException;
 
-final class Buying extends Resource
+final class Buying extends BaseResource
 {
     private const CREATE_BUYING_RESOURCE = 'buying/email';
 
