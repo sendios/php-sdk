@@ -676,23 +676,6 @@ if (!$result){
 //}
 ```
 
-# Custom click tracking
-You can provide info about clicking on email link instead of our link wrapping.<br>
-
-For that you have to find our parameter mail_id in our letters.<br>
-Example for mail_id value 17883239305
-```code
-Link at your site: https://site.com/page?some=param&mail_id=17883239305
-Link in letters: https://n.site.com/link?m=17883239305
-```   
-   
-For sending this mail_id as click event please use GET request to API point:
-```shell
-curl https://api.sendios.io/track/mail/click?m=17883239305
-```
-where 17883239305 is our mail_id
-
-
 # Other
 
 ## Get response (if $result === false)
