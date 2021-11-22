@@ -7,7 +7,6 @@ use Sendios\Http\Request;
 use Sendios\Resources\Buying;
 use Sendios\Resources\ClientUser;
 use Sendios\Resources\Email;
-use Sendios\Resources\Event;
 use Sendios\Resources\Push;
 use Sendios\Resources\Unsub;
 use Sendios\Resources\UnsubTypes;
@@ -28,7 +27,6 @@ use Sendios\Services\ErrorHandler;
  * @property Unsub $unsub
  * @property UnsubTypes $unsubTypes
  * @property Webpush $webpush
- * @property Event $event
  * @property ClientUser $clientUser
  * @property Encrypter $encrypter
  */
