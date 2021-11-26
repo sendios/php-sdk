@@ -9,7 +9,7 @@ final class Email extends BaseResource
     private const CHECK_EMAIL_RESOURCE = 'email/check';
     private const VALIDATE_EMAIL_RESOURCE = 'email/check/send';
     private const TRACK_CLICK_RESOURCE = 'trackemail/click/';
-    private const TRACK_MAIL_CLICK_RESOURCE = 'client/track/mail/click';
+    private const TRACK_MAIL_CLICK_RESOURCE = 'track/mail/click/client';
 
     /**
      * @param string $email
