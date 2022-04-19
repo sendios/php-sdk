@@ -49,11 +49,14 @@ final class Push extends BaseResource
             'category' => $categoryId,
             'client_id' => $this->clientId,
             'project_id' => $projectId,
-            'user' => $user,
-            'meta' => $meta
+            'data' => [
+                'user' => $user,
+                'meta' => $meta,
+                'value_encrypt' => [
+                    'template_data' => $this->encrypter->encrypt($data),
+                ],
+            ]
         );
-
-        $params['value_encrypt']['template_data'] = $this->encrypter->encrypt($data);
 
         $resource = $this->resources[$categoryId];
 
