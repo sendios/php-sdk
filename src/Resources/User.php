@@ -175,12 +175,12 @@ final class User extends BaseResource
      * @param \DateTime $dateTime
      * @return bool|mixed
      */
-    public function setOnlineByEmailAndProjectId(string $email,int $projectId, \DateTime $dateTime)
+    public function setOnlineByEmailAndProjectId(string $email, int $projectId, \DateTime $dateTime)
     {
         $data = [
             'timestamp' => $dateTime->format('U'),
             'project_id' => $projectId,
-            'encoded_email' => base64_encode($email)
+            'encoded_email' => base64_encode($email),
         ];
         $resource = strtr(self::SET_ONLINE_BY_EMAIL_AND_PROJECT_ID_RESOURCE, [
             ':emailHash' => base64_encode($email),
@@ -225,6 +225,7 @@ final class User extends BaseResource
      * @param int|null $mailId
      * @return bool|mixed
      * @throws \Exception
+     * @deprecated Using createPaymentByEmailAndProjectId instead.
      */
     public function addPaymentByEmailAndProjectId(
         string $email,
@@ -237,36 +238,35 @@ final class User extends BaseResource
         ?int $mailId = null
     ) {
         $user = $this->getByEmail($email, $projectId);
-        if (!$user || !$user['id']) {
-            return false;
-        }
 
-        $data = [
-            'start_date' => $startDate,
-            'user_id' => $user['id'],
-        ];
+        return $this->createPayment($user, $startDate, $expireDate, $paymentType, $amount, $mailId);
+    }
 
-        if ($expireDate) {
-            $data['expire_date'] = $expireDate;
-        }
+    /**
+     * Create payment by user email and project ID
+     *
+     * @param string $email
+     * @param int $projectId
+     * @param int $startDate
+     * @param int|null $expireDate
+     * @param int|null $paymentType
+     * @param int|null $amount
+     * @param int|null $mailId
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function createPaymentByEmailAndProjectId(
+        string $email,
+        int $projectId,
+        int $startDate,
+        ?int $expireDate = null,
+        ?int $paymentType = null,
+        ?int $amount = null,
+        ?int $mailId = null
+    ) {
+        $user = $this->getByEmail($email, $projectId);
 
-        if ($totalCount) {
-            $data['total_count'] = $totalCount;
-        }
-
-        if ($paymentType) {
-            $data['payment_type'] = $paymentType;
-        }
-
-        if ($amount) {
-            $data['amount'] = $amount;
-        }
-
-        if ($mailId) {
-            $data['mail_id'] = $mailId;
-        }
-
-        return $this->request->create(self::CREATE_LAST_PAYMENT_RESOURCE, $data);
+        return $this->createPayment($user, $startDate, $expireDate, $paymentType, $amount, $mailId);
     }
 
     /**
@@ -281,6 +281,7 @@ final class User extends BaseResource
      * @param int|null $mailId
      * @return bool|mixed
      * @throws \Exception
+     * @deprecated Using createPaymentByEmailAndProjectId instead.
      */
     public function addPaymentByUser(
         array $user,
@@ -295,6 +296,79 @@ final class User extends BaseResource
             return false;
         }
 
+        return $this->createPayment($user, $startDate, $expireDate, $paymentType, $amount, $mailId);
+    }
+
+    /**
+     * Create payment by user
+     *
+     * @param array $user
+     * @param int $startDate
+     * @param int|null $expireDate
+     * @param int|null $paymentType
+     * @param int|null $amount
+     * @param int|null $mailId
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function createPaymentByUser(
+        array $user,
+        int $startDate,
+        ?int $expireDate = null,
+        ?int $paymentType = null,
+        ?int $amount = null,
+        ?int $mailId = null
+    ) {
+        if (empty($user) || !$user['id']) {
+            return false;
+        }
+
+        return $this->createPayment($user, $startDate, $expireDate, $paymentType, $amount, $mailId);
+    }
+
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @return bool|mixed
+     */
+    public function forceConfirmByEmailAndProject(string $email, int $projectId)
+    {
+        $data = [
+            'last_reaction' => time(),
+            'project_id' => $projectId,
+            'encoded_email' => base64_encode($email),
+        ];
+
+        $resource = strtr(self::CONFIRM_BY_EMAIL_AND_PROJECT_ID_RESOURCE, [
+            ':emailHash' => base64_encode($email),
+            ':projectId' => $projectId,
+        ]);
+
+        return $this->request->sendToApi3($resource, 'PUT', $data);
+    }
+
+    /**
+     * @param array $user
+     * @param int $startDate
+     * @param int|null $expireDate
+     * @param int|null $paymentType
+     * @param int|null $amount
+     * @param int|null $mailId
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    private function createPayment(
+        array $user,
+        int $startDate,
+        ?int $expireDate,
+        ?int $paymentType,
+        ?int $amount,
+        ?int $mailId
+    ) {
+        if (!$user || !$user['id']) {
+            return false;
+        }
+
         $data = [
             'start_date' => $startDate,
             'user_id' => $user['id'],
@@ -302,10 +376,6 @@ final class User extends BaseResource
 
         if ($expireDate) {
             $data['expire_date'] = $expireDate;
-        }
-
-        if ($totalCount) {
-            $data['total_count'] = $totalCount;
         }
 
         if ($paymentType) {
@@ -321,26 +391,5 @@ final class User extends BaseResource
         }
 
         return $this->request->create(self::CREATE_LAST_PAYMENT_RESOURCE, $data);
-    }
-
-    /**
-     * @param string $email
-     * @param int $projectId
-     * @return bool|mixed
-     */
-    public function forceConfirmByEmailAndProject(string $email, int $projectId)
-    {
-        $data = [
-            'last_reaction' => time(),
-            'project_id' => $projectId,
-            'encoded_email' => base64_encode($email)
-        ];
-
-        $resource = strtr(self::CONFIRM_BY_EMAIL_AND_PROJECT_ID_RESOURCE, [
-            ':emailHash' => base64_encode($email),
-            ':projectId' => $projectId,
-        ]);
-
-        return $this->request->sendToApi3($resource, 'PUT', $data);
     }
 }
