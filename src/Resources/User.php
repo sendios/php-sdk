@@ -327,27 +327,6 @@ final class User extends BaseResource
     }
 
     /**
-     * @param string $email
-     * @param int $projectId
-     * @return bool|mixed
-     */
-    public function forceConfirmByEmailAndProject(string $email, int $projectId)
-    {
-        $data = [
-            'last_reaction' => time(),
-            'project_id' => $projectId,
-            'encoded_email' => base64_encode($email),
-        ];
-
-        $resource = strtr(self::CONFIRM_BY_EMAIL_AND_PROJECT_ID_RESOURCE, [
-            ':emailHash' => base64_encode($email),
-            ':projectId' => $projectId,
-        ]);
-
-        return $this->request->sendToApi3($resource, 'PUT', $data);
-    }
-
-    /**
      * @param array $user
      * @param int $startDate
      * @param int|null $expireDate
@@ -391,5 +370,26 @@ final class User extends BaseResource
         }
 
         return $this->request->create(self::CREATE_LAST_PAYMENT_RESOURCE, $data);
+    }
+
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @return bool|mixed
+     */
+    public function forceConfirmByEmailAndProject(string $email, int $projectId)
+    {
+        $data = [
+            'last_reaction' => time(),
+            'project_id' => $projectId,
+            'encoded_email' => base64_encode($email),
+        ];
+
+        $resource = strtr(self::CONFIRM_BY_EMAIL_AND_PROJECT_ID_RESOURCE, [
+            ':emailHash' => base64_encode($email),
+            ':projectId' => $projectId,
+        ]);
+
+        return $this->request->sendToApi3($resource, 'PUT', $data);
     }
 }
