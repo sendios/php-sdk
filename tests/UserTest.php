@@ -3,10 +3,10 @@
 namespace Tests;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Sendios\Http\Request;
 use Sendios\Resources\User;
 use Sendios\SendiosSdk;
-use PHPUnit\Framework\TestCase;
 use Sendios\Services\CurlRequest;
 use Sendios\Services\ErrorHandler;
 
@@ -215,6 +215,11 @@ class UserTest extends TestCase
         $this->assertEquals(false, $result);
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     * @deprecated
+     */
     public function testAddPaymentByEmailAndProjectId()
     {
         $time = time();
@@ -250,6 +255,11 @@ class UserTest extends TestCase
         $this->assertEquals(['added' => true], $result);
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     * @deprecated
+     */
     public function testAddPaymentByEmailWrongUserData()
     {
         $this->request->expects($this->once())
@@ -271,30 +281,130 @@ class UserTest extends TestCase
         $this->assertEquals(false, $result);
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     * @deprecated
+     */
     public function testAddPaymentByUser()
     {
         $time = time();
         $this->request->expects($this->once())
             ->method('create')
-            ->with('lastpayment',
-                ['start_date' => $time,
+            ->with(
+                'lastpayment',
+                [
+                    'start_date' => $time,
                     'user_id' => 123,
                     'expire_date' => $time,
                     'total_count' => 10,
                     'payment_type' => 1,
                     'amount' => 100,
-                ])
+                ]
+            )
             ->will($this->returnValue(['added' => true]));
 
         $this->service->request = $this->request;
-        $result = $this->service->user->addPaymentByUser(['id' => 123],$time, $time, 10, 1, 100);
+        $result = $this->service->user->addPaymentByUser(['id' => 123], $time, $time, 10, 1, 100);
         $this->assertEquals(['added' => true], $result);
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     * @deprecated
+     */
     public function testAddPaymentByUserWrongUserData()
     {
         $time = time();
-        $result = $this->service->user->addPaymentByUser([],$time, $time, 10, 1, 100);
+        $result = $this->service->user->addPaymentByUser([], $time, $time, 10, 1, 100);
+        $this->assertEquals(false, $result);
+    }
+
+    public function testCreatePaymentByEmailAndProjectId()
+    {
+        $time = time();
+        $this->request->expects($this->once())
+            ->method('receive')
+            ->with('user/project/1/email/test@test.com')
+            ->will($this->returnValue(['user' => ['id' => 123]]));
+
+        $this->request->expects($this->once())
+            ->method('create')
+            ->with(
+                'lastpayment',
+                [
+                    'start_date' => $time,
+                    'user_id' => 123,
+                    'expire_date' => $time,
+                    'total_count' => 10,
+                    'payment_type' => 1,
+                    'amount' => 100,
+                    'mail_id' => 12345,
+                ]
+            )
+            ->will($this->returnValue(['added' => true]));
+
+        $this->service->request = $this->request;
+        $result = $this->service->user->createPaymentByEmailAndProjectId(
+            'test@test.com',
+            1,
+            $time,
+            $time,
+            1,
+            100,
+            12345
+        );
+        $this->assertEquals(['added' => true], $result);
+    }
+
+    public function testCreatePaymentByEmailWrongUserData()
+    {
+        $this->request->expects($this->once())
+            ->method('receive')
+            ->with('user/project/1/email/test@test.com')
+            ->will($this->returnValue(false));
+
+        $this->service->request = $this->request;
+        $result = $this->service->user->createPaymentByEmailAndProjectId(
+            'test@test.com',
+            1,
+            time(),
+            time(),
+            1,
+            100,
+            12345
+        );
+        $this->assertEquals(false, $result);
+    }
+
+    public function testCreatePaymentByUser()
+    {
+        $time = time();
+        $this->request->expects($this->once())
+            ->method('create')
+            ->with(
+                'lastpayment',
+                [
+                    'start_date' => $time,
+                    'user_id' => 123,
+                    'expire_date' => $time,
+                    'total_count' => 10,
+                    'payment_type' => 1,
+                    'amount' => 100,
+                ]
+            )
+            ->will($this->returnValue(['added' => true]));
+
+        $this->service->request = $this->request;
+        $result = $this->service->user->createPaymentByUser(['id' => 123], $time, $time, 1, 100);
+        $this->assertEquals(['added' => true], $result);
+    }
+
+    public function testCreatePaymentByUserWrongUserData()
+    {
+        $time = time();
+        $result = $this->service->user->createPaymentByUser([], $time, $time, 1, 100);
         $this->assertEquals(false, $result);
     }
 

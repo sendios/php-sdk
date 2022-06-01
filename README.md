@@ -617,7 +617,7 @@ $mailId = 12244; //Mail id (optional, default false)
 By email and project ID
 
 ```php
-$result = $sendios->user->addPaymentByEmailAndProjectId('ercling@yandex.ru', 2, $startDate, $expireDate, $paymentCount, $paymentType, $amount, $mailId);
+$result = $sendios->user->cratePaymentByEmailAndProjectId('ercling@yandex.ru', 2, $startDate, $expireDate, $paymentType, $amount, $mailId);
 // $result is a boolean status
 ```
 
@@ -625,7 +625,7 @@ By user
 
 ```php
 $user = $sendios->user->getById(892396028);
-$result = $sendios->user->addPaymentByUser($user, $startDate, $expireDate, $paymentCount, $paymentType, $amount, $mailId);
+$result = $sendios->user->createPaymentByUser($user, $startDate, $expireDate, $paymentType, $amount, $mailId);
 // $result is a boolean status
 ```
 
