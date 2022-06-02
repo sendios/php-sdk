@@ -30,6 +30,11 @@ class UserTest extends TestCase
         $this->request = $this->createMock(Request::class);
     }
 
+    public function testFoo()
+    {
+        $this->assertTrue(false);
+    }
+
     public function testShouldCheckGetByEmail()
     {
         $predefinedResult = ['user' => ['id' => 42]];
