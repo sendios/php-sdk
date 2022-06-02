@@ -81,7 +81,7 @@ class EmailTest extends TestCase
             ->getMock();
         $request->expects($this->once())
             ->method('sendToApi3')
-            ->with('client/track/mail/click?u=3&m=2&p=1&t=6&s=5&tp=4')
+            ->with('track/mail/click/client?u=3&m=2&p=1&t=6&s=5&tp=4')
             ->will($this->returnValue(['result' => true]));
 
         $sendios->request = $request;
@@ -108,7 +108,7 @@ class EmailTest extends TestCase
             ->getMock();
         $request->expects($this->once())
             ->method('sendToApi3')
-            ->with('client/track/mail/click?u=3&m=2&p=1')
+            ->with('track/mail/click/client?u=3&m=2&p=1')
             ->will($this->returnValue(['result' => true]));
 
         $sendios->request = $request;
@@ -133,7 +133,7 @@ class EmailTest extends TestCase
             ->getMock();
         $request->expects($this->once())
             ->method('sendToApi3')
-            ->with('client/track/mail/click?u=3&m=2&p=1&t=4&s=5&tp=6')
+            ->with('track/mail/click/client?u=3&m=2&p=1&t=6&s=5&tp=4')
             ->will($this->returnValue(['result' => true]));
 
         $sendios->request = $request;
@@ -162,7 +162,7 @@ class EmailTest extends TestCase
             ->getMock();
         $request->expects($this->once())
             ->method('sendToApi3')
-            ->with('client/track/mail/click?u=3&m=2&p=1')
+            ->with('track/mail/click/client?u=3&m=2&p=1')
             ->will($this->returnValue(['result' => true]));
 
         $sendios->request = $request;

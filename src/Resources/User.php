@@ -238,7 +238,9 @@ final class User extends BaseResource
         ?int $mailId = null
     ) {
         $user = $this->getByEmail($email, $projectId);
-
+        if (empty($user) || !$user['id']) {
+            return false;
+        }
         return $this->createPayment($user, $startDate, $expireDate, $paymentType, $amount, $mailId);
     }
 
@@ -265,7 +267,9 @@ final class User extends BaseResource
         ?int $mailId = null
     ) {
         $user = $this->getByEmail($email, $projectId);
-
+        if (empty($user) || !$user['id']) {
+            return false;
+        }
         return $this->createPayment($user, $startDate, $expireDate, $paymentType, $amount, $mailId);
     }
 
