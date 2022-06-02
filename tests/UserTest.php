@@ -234,7 +234,6 @@ class UserTest extends TestCase
                 ['start_date' => $time,
                     'user_id' => 123,
                     'expire_date' => $time,
-                    'total_count' => 10,
                     'payment_type' => 1,
                     'amount' => 100,
                     'mail_id' => 12345
@@ -297,7 +296,6 @@ class UserTest extends TestCase
                     'start_date' => $time,
                     'user_id' => 123,
                     'expire_date' => $time,
-                    'total_count' => 10,
                     'payment_type' => 1,
                     'amount' => 100,
                 ]
@@ -337,7 +335,6 @@ class UserTest extends TestCase
                     'start_date' => $time,
                     'user_id' => 123,
                     'expire_date' => $time,
-                    'total_count' => 10,
                     'payment_type' => 1,
                     'amount' => 100,
                     'mail_id' => 12345,
@@ -389,7 +386,6 @@ class UserTest extends TestCase
                     'start_date' => $time,
                     'user_id' => 123,
                     'expire_date' => $time,
-                    'total_count' => 10,
                     'payment_type' => 1,
                     'amount' => 100,
                 ]
