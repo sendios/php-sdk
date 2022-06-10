@@ -421,4 +421,23 @@ class UserTest extends TestCase
             1
         );
     }
+
+    public function testErase(): void
+    {
+        $email = 'foo@bar.baz';
+        $projectId = 123;
+
+        $this->request->expects($this->once())
+            ->method('send')
+            ->with('users/erase', 'POST', [
+                'email' => $email,
+                'project_id' => $projectId,
+            ])
+            ->will($this->returnValue(['deleted' => true]));
+
+        $this->service->request = $this->request;
+
+        $result = $this->service->user->erase($email, $projectId);
+        $this->assertEquals(['deleted' => true], $result);
+    }
 }

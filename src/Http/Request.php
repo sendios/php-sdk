@@ -116,7 +116,7 @@ class Request
      * @return bool|mixed
      * @throws \Exception
      */
-    private function send(string $resource, string $method, array $data = [])
+    public function send(string $resource, string $method, array $data = [])
     {
         $method = strtoupper($method);
         $uri = $this->apiBase . $resource;
