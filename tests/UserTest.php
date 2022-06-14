@@ -429,7 +429,7 @@ class UserTest extends TestCase
 
         $this->request->expects($this->once())
             ->method('send')
-            ->with('users/erase', 'POST', [
+            ->with('user/erase', 'POST', [
                 'email' => $email,
                 'project_id' => $projectId,
             ])
