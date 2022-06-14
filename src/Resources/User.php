@@ -14,7 +14,7 @@ final class User extends BaseResource
     private const SET_ONLINE_BY_USER_ID_RESOURCE = 'users/:userId/online';
     private const CREATE_LAST_PAYMENT_RESOURCE = 'lastpayment';
     private const CONFIRM_BY_EMAIL_AND_PROJECT_ID_RESOURCE = 'users/project/:projectId/email/:emailHash/confirm';
-    private const ERASE = 'users/erase';
+    private const ERASE = 'user/erase';
 
     public const PLATFORM_UNKNOWN = 0;
     public const PLATFORM_DESKTOP = 1;
