@@ -125,6 +125,8 @@ You dont need to provide any response for this request. Only server 200 OK
 curl -X POST https://api.yourproduct.com/sendios/requestevent \
     -d '{"project_id": 123, "email": "test@example.com", "type_id": 1}'
 ```
+Usually we expecting that you will make API request for sending  transactional email via [Sending email](https://github.com/sendios/php-sdk#sending-email-via-php-sdk)
+
 
 # Webhooks about sending status
 You can setup webhooks in project's settings (admin panel) URL API point for receiving events than happens with letter.
