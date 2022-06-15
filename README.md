@@ -118,7 +118,9 @@ Optional parameters:
     "token": "awo7tiwafhiajwk8ehc"
 }
 ```
-You can test your API point with this cURL request:
+You dont need to provide any response for this request. Only server 200 OK
+
+### How you can test your API point with this cURL request:
 ```shell
 curl -X POST https://api.yourproduct.com/sendios/requestevent \
     -d '{"project_id": 123, "email": "test@example.com", "type_id": 1}'
