@@ -114,8 +114,7 @@ Your API point will receive POST request with theese parameters:
 Optional parameters:
 ```json
 {
-    "client_user_id": 123234, // Your userId on product
-    "token": "awo7tiwafhiajwk8ehc"
+    "client_user_id": 123234 // Your userId on product
 }
 ```
 You dont need to provide any response for this request. Only server 200 OK
