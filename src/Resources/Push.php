@@ -43,12 +43,10 @@ final class Push extends BaseResource
      */
     public function send(int $typeId, int $categoryId, int $projectId, string $email, array $user = [], array $data = [], array $meta = [])
     {
-        $user['email'] = $email;
-        $params = array(
+        $params = [
             'type_id' => $typeId,
-            'category' => $categoryId,
-            'client_id' => $this->clientId,
             'project_id' => $projectId,
+            'email' => $email,
             'data' => [
                 'user' => $user,
                 'meta' => $meta,
@@ -56,7 +54,7 @@ final class Push extends BaseResource
                     'template_data' => $this->encrypter->encrypt($data),
                 ],
             ]
-        );
+        ];
 
         $resource = $this->resources[$categoryId];
 
