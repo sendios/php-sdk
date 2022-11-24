@@ -24,13 +24,14 @@ class ErrorHandler
             throw $e;
         }
 
-        $template = ':time Sendios: [:type] :message in :file in line :line';
+        $template = ':time Sendios: [:type] :message in :file in line :line. Stack trace: :trace';
         $logMessage = strtr($template, array(
             ':time' => date('Y-m-d H:i:s'),
             ':type' => $e->getCode(),
             ':message' => $e->getMessage(),
             ':file' => $e->getFile(),
-            ':line' => $e->getLine()
+            ':line' => $e->getLine(),
+            ':trace' => $e->getTraceAsString()
         ));
         error_log($logMessage);
     }
