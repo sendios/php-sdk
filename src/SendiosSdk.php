@@ -55,7 +55,7 @@ class SendiosSdk
      * @param string $clientKey
      * @throws Exception\EncryptException
      */
-    public function __construct(int $clientId, string $clientKey)
+    public function __construct(int $clientId, string $clientKey, ErrorHandler $errorHandler = null)
     {
         if (empty($clientId)) {
             throw new \InvalidArgumentException('clientId cannot be empty');
@@ -67,7 +67,7 @@ class SendiosSdk
         $this->clientId = $clientId;
         $this->clientKey = $clientKey;
 
-        $this->errorHandler = new ErrorHandler();
+        $this->errorHandler = $errorHandler ?? new ErrorHandler();
         $this->encrypter = $this->getEncrypter($this->clientKey);
         $this->request = new Request($this->clientId, $this->clientKey, $this->errorHandler);
     }
