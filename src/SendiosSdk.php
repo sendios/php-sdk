@@ -16,9 +16,6 @@ use Sendios\Services\Encrypter;
 use Sendios\Services\ErrorHandler;
 
 /**
- * Class SendiosSdk
- *
- * @property ErrorHandler $errorHandler
  * @property Request $request
  * @property Buying $buying
  * @property Push $push
@@ -28,7 +25,6 @@ use Sendios\Services\ErrorHandler;
  * @property UnsubTypes $unsubTypes
  * @property Webpush $webpush
  * @property ClientUser $clientUser
- * @property Encrypter $encrypter
  */
 class SendiosSdk
 {
@@ -47,7 +43,11 @@ class SendiosSdk
      */
     public $encrypter;
 
-    private const RESOURCES_PROPERTIES = ['email', 'user', 'unsub', 'unsubTypes', 'webpush', 'content', 'event', 'clientUser', 'buying', 'push'];
+    private const RESOURCES_PROPERTIES = ['email', 'user', 'unsub', 'unsubTypes', 'webpush', 'content', 'event', 'clientUser', 'buying', 'push', 'request'];
+    /**
+     * @var ErrorHandler
+     */
+    private $errorHandler;
 
     /**
      * SendiosSdk constructor.
@@ -69,7 +69,6 @@ class SendiosSdk
 
         $this->errorHandler = new ErrorHandler();
         $this->encrypter = $this->getEncrypter($this->clientKey);
-        $this->request = new Request($this->clientId, $this->clientKey, $this->errorHandler);
     }
 
     /**
@@ -93,6 +92,9 @@ class SendiosSdk
                     $this->unsub = new Unsub($this->user, $this->errorHandler, $this->request);
                     return $this->unsub;
                 }
+                case 'request' : {
+                    return new Request($this->clientId, $this->clientKey, $this->errorHandler);
+                }
                 default : {
                     $className = 'Sendios\Resources\\' . ucfirst($name);
                     $this->{$name} = new $className($this->errorHandler, $this->request);
@@ -102,6 +104,11 @@ class SendiosSdk
         }
 
         return $this->{$name};
+    }
+
+    public function setErrorHandler(ErrorHandler $errorHandler): void
+    {
+        $this->errorHandler = $errorHandler;
     }
 
     /**
