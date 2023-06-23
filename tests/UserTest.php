@@ -432,6 +432,7 @@ class UserTest extends TestCase
             ->with('user/erase', 'POST', [
                 'email' => $email,
                 'project_id' => $projectId,
+                'force_delete' => false
             ])
             ->will($this->returnValue(['deleted' => true]));
 
