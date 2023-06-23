@@ -398,11 +398,19 @@ final class User extends BaseResource
         return $this->request->sendToApi3($resource, 'PUT', $data);
     }
 
-    public function erase(string $email, int $projectId)
+    /**
+     * @param string $email
+     * @param int $projectId
+     * @param bool $forceDelete Delete user within 10min
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function erase(string $email, int $projectId, bool $forceDelete = false)
     {
         $data = [
             'email' => $email,
             'project_id' => $projectId,
+            'force_delete' => $forceDelete
         ];
 
         return $this->request->send(self::ERASE, 'POST', $data);
