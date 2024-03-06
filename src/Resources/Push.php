@@ -40,9 +40,18 @@ final class Push extends BaseResource
      * @return bool|mixed
      * @throws \Sendios\Exception\EncryptException
      * @throws \Exception
-     */
-    public function send(int $typeId, int $categoryId, int $projectId, string $email, array $user = [], array $data = [], array $meta = [])
+     */public function send(int $typeId, int $categoryId, int $projectId, string $email, array $user = [], array $data = [], array $meta = [], ?int $templateId, ?int $subjectId = null)
     {
+        $transactionalMailSettings = [];
+
+        if ($subjectId) {
+            $transactionalMailSettings['subject_id'] = $subjectId;
+        }
+
+        if ($templateId) {
+            $transactionalMailSettings['template_id'] = $templateId;
+        }
+
         $params = [
             'type_id' => $typeId,
             'project_id' => $projectId,
@@ -53,7 +62,8 @@ final class Push extends BaseResource
                 'value_encrypt' => [
                     'template_data' => $this->encrypter->encrypt($data),
                 ],
-            ]
+            ],
+            'transactional_mail_settings' => $transactionalMailSettings,
         ];
 
         $resource = $this->resources[$categoryId];
