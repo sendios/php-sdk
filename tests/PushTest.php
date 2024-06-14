@@ -3,10 +3,8 @@
 namespace Tests;
 
 use Sendios\Http\Request;
-use Sendios\Resources\Push;
 use Sendios\SendiosSdk;
 use PHPUnit\Framework\TestCase;
-use Sendios\Services\Encrypter;
 use Sendios\Services\ErrorHandler;
 
 class PushTest extends TestCase
@@ -45,10 +43,6 @@ class PushTest extends TestCase
                 'email' => 'someone@example.com'
             )
         );
-
-        $encrypter = new Encrypter(substr(md5($clientKey), 4, 16));
-        $params['value_encrypt']['template_data'] = $encrypter->encrypt($data);
-
 
         $result = $sendios->push->send($params['type_id'], $params['category'], $params['project_id'], $params['user']['email'], array('email' => ''), $data, $meta);
         $this->assertEquals($predefinedResult, $result);
