@@ -54,9 +54,7 @@ final class Push extends BaseResource
             'data' => [
                 'user' => $user,
                 'meta' => $meta,
-                'value_encrypt' => [
-                    'data' => $data,
-                ],
+                'data' => $data,
             ],
             'transactional_mail_settings' => $transactionalMailSettings,
         ];
