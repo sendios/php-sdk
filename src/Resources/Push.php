@@ -47,15 +47,14 @@ final class Push extends BaseResource
             $transactionalMailSettings['template_id'] = $templateId;
         }
 
+        $data['user'] = $user;
+        $data['meta'] = $meta;
+
         $params = [
             'type_id' => $typeId,
             'project_id' => $projectId,
             'email' => $email,
-            'data' => [
-                'user' => $user,
-                'meta' => $meta,
-                'data' => $data,
-            ],
+            'data' => $data,
             'transactional_mail_settings' => $transactionalMailSettings,
         ];
 
