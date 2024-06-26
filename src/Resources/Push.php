@@ -3,16 +3,12 @@
 namespace Sendios\Resources;
 
 use Sendios\Http\Request;
-use Sendios\Services\Encrypter;
 use Sendios\Services\ErrorHandler;
 
 final class Push extends BaseResource
 {
     /** @var int */
     private $clientId;
-
-    /** @var Encrypter  */
-    private $encrypter;
 
     private const CATEGORY_SYSTEM = 1;
     private const CATEGORY_TRIGGER = 2;
@@ -22,10 +18,9 @@ final class Push extends BaseResource
         self::CATEGORY_TRIGGER => 'push/trigger',
     );
 
-    public function __construct($clientId, Encrypter $encrypter, ErrorHandler $errorHandler, Request $request)
+    public function __construct($clientId, ErrorHandler $errorHandler, Request $request)
     {
         $this->clientId = $clientId;
-        $this->encrypter = $encrypter;
         parent::__construct($errorHandler, $request);
     }
 
@@ -40,7 +35,7 @@ final class Push extends BaseResource
      * @return bool|mixed
      * @throws \Sendios\Exception\EncryptException
      * @throws \Exception
-     */public function send(int $typeId, int $categoryId, int $projectId, string $email, array $user = [], array $data = [], array $meta = [], ?int $templateId, ?int $subjectId = null)
+     */public function send(int $typeId, int $categoryId, int $projectId, string $email, array $user = [], array $data = [], array $meta = [], ?int $templateId = null, ?int $subjectId = null)
     {
         $transactionalMailSettings = [];
 
@@ -52,17 +47,14 @@ final class Push extends BaseResource
             $transactionalMailSettings['template_id'] = $templateId;
         }
 
+        $data['user'] = $user;
+        $data['meta'] = $meta;
+
         $params = [
             'type_id' => $typeId,
             'project_id' => $projectId,
             'email' => $email,
-            'data' => [
-                'user' => $user,
-                'meta' => $meta,
-                'value_encrypt' => [
-                    'template_data' => $this->encrypter->encrypt($data),
-                ],
-            ],
+            'data' => $data,
             'transactional_mail_settings' => $transactionalMailSettings,
         ];
 

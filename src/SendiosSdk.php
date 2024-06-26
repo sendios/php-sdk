@@ -12,7 +12,6 @@ use Sendios\Resources\Unsub;
 use Sendios\Resources\UnsubTypes;
 use Sendios\Resources\User;
 use Sendios\Resources\Webpush;
-use Sendios\Services\Encrypter;
 use Sendios\Services\ErrorHandler;
 
 /**
@@ -36,10 +35,7 @@ class SendiosSdk
      * @var string
      */
     public $clientKey;
-    /**
-     * @var Encrypter
-     */
-    public $encrypter;
+
     private const RESOURCES_PROPERTIES = [
         'email',
         'user',
@@ -77,7 +73,6 @@ class SendiosSdk
         $this->clientKey = $clientKey;
 
         $this->errorHandler = new ErrorHandler();
-        $this->encrypter = $this->getEncrypter($this->clientKey);
     }
 
     /**
@@ -97,7 +92,7 @@ class SendiosSdk
         }
         switch ($name) {
             case 'push' :
-                $this->push = new Push($this->clientId, $this->encrypter, $this->errorHandler, $this->request);
+                $this->push = new Push($this->clientId, $this->errorHandler, $this->request);
 
                 return $this->push;
 
@@ -120,17 +115,5 @@ class SendiosSdk
     public function setErrorHandler(ErrorHandler $errorHandler): void
     {
         $this->errorHandler = $errorHandler;
-    }
-
-    /**
-     * @param string $clientKey
-     * @return Encrypter
-     * @throws Exception\EncryptException
-     */
-    protected function getEncrypter(string $clientKey): Encrypter
-    {
-        $hash = substr(md5($clientKey), 4, 16);
-
-        return new Encrypter($hash);
     }
 }
